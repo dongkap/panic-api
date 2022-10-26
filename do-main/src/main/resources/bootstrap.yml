@@ -1,0 +1,88 @@
+server:
+  port: ${PORT:8085}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: ${application.name}
+  messages:
+    basename: i18n/messages
+    cache-seconds: -1
+    encoding: UTF-8
+  aop:
+    proxy-target-class: true
+  mvc:
+    locale: en_US
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 60MB
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: Google
+            clientId: ${GOOGLE_OAUTH_CLIENT_ID}
+            clientSecret: ${GOOGLE_OAUTH_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          github:
+            client-name: Github
+            clientId: ${GITHUB_OAUTH_CLIENT_ID}
+            clientSecret: ${GITHUB_OAUTH_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+          facebook:
+            client-name: Facebook
+            clientId: ${FACEBOOK_OAUTH_CLIENT_ID}
+            clientSecret: ${FACEBOOK_OAUTH_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+
+logging:
+  level:
+    root: INFO
+    org.apache: INFO
+    com.netflix: INFO
+    com.netflix.loadbalancer.reactive.LoadBalancerCommand: DEBUG
+    org.springframework.web: INFO
+    org.springframework.cloud: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type: INFO
+    org.apache.http: INFO
+    org.apache.tomcat: INFO
+    com.mchange.v2.async.ThreadPoolAsynchronousRunner: INFO
+    com.github.isrsal.logging.LoggingFilter: INFO
+    org.apache.catalina.session.ManagerBase.level: INFO
+
+---
+spring:
+  profiles: development
+  jpa:
+    show-sql: true
+
+---
+spring:
+  profiles: production
+  jpa:
+    show-sql: false

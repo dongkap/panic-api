@@ -1,0 +1,1 @@
+psql -d panic -f "do-data-support.sql" -U dongkap
