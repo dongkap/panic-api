@@ -20,8 +20,9 @@ dongkap:
     secret-key: ${RECAPTCHA_SECRET_KEY:null}
   notif:
     icon: ${ICON_NOTIFICATION:/assets/icons/icon-72x72.png}
-    user: metro.panic@mailinator.com
     tag: panic
+    default:
+      is-admin: true
   file:
     path:
       tmp: ${PATH_TMP:./tmp/temps/}

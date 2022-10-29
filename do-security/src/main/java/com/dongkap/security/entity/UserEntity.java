@@ -103,9 +103,6 @@ public class UserEntity extends BaseAuditEntity implements UserDetails, OAuth2Us
 	@Column(name = "raw", nullable = true)
 	private String raw;
 
-	@Column(name = "image", nullable = true)
-	private String image;
-
 	@Column(name = "authority_default")
 	private String authorityDefault;
 
@@ -158,7 +155,6 @@ public class UserEntity extends BaseAuditEntity implements UserDetails, OAuth2Us
 
 	@Transient
 	public UserPrincipal getUserPrincipal() {
-		this.attributes.put("image", this.image);
 		this.attributes.put("locale", this.getSettings().getLocaleCode());
 		this.attributes.put("theme", this.getSettings().getTheme());
 		UserPrincipal userPrincipal = new UserPrincipal(this.id, this.username, this.password, this.enabled,

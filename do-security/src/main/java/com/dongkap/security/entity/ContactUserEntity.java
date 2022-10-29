@@ -38,8 +38,14 @@ public class ContactUserEntity extends BaseAuditEntity {
 	@GeneratedValue(generator = "uuid")
     @Column(name = "contact_user_uuid", nullable = false, unique=true)
 	private String id;
+
+	@Column(name = "phone_number", nullable = true)
+	private String phoneNumber;
+
+	@Column(name = "administrative_area_name", nullable = true)
+	private String administrativeAreaName;
 	
-	@Column(name = "address", nullable = false)
+	@Column(name = "address", nullable = true)
 	private String address;
 
 	@Column(name = "country", nullable = true)
@@ -59,9 +65,6 @@ public class ContactUserEntity extends BaseAuditEntity {
 
 	@Column(name = "zipcode", nullable = true)
 	private String zipcode;
-
-	@Column(name = "phone_number", nullable = true)
-	private String phoneNumber;
 
 	@Column(name = "description", nullable = true)
 	private String description;

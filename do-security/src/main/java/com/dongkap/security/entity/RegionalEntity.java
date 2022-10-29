@@ -39,9 +39,6 @@ public class RegionalEntity extends BaseAuditEntity {
 	@Column(name = "regional_uuid", nullable = false, unique = true)
 	private String id;
 
-	@Column(name = "regional_code", nullable = false, unique = true)
-	private String regionalCode;
-
 	@Column(name = "regional_name", nullable = false)
 	private String regionalName;
 
@@ -50,7 +47,13 @@ public class RegionalEntity extends BaseAuditEntity {
             @AttributeOverride(name = "x", column = @Column(name = "latitude", nullable = false)),
             @AttributeOverride(name = "y", column = @Column(name = "longitude", nullable = false))
     })
-	private Point latestCoordinate;
+	private Point coordinate;
+
+	@Column(name = "administrative_area_short")
+	private String administrativeAreaShort;
+
+	@Column(name = "administrative_area_name")
+	private String administrativeAreaName;
 
 	@Column(name = "address")
 	private String address;

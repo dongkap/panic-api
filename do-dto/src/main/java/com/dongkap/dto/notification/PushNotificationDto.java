@@ -15,8 +15,6 @@ public class PushNotificationDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5053426923486522719L;
-	private String from;
-    private String to;
     private String title;
     private String body;
     private Object data;

@@ -1,6 +1,5 @@
 package com.dongkap.security.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -71,7 +70,7 @@ public class CorporateImplService extends CommonService {
 	}
 	
 	@Transactional
-	public List<CorporateDto> postCorporate(CorporateDto request, String username) throws Exception {
+	public void postCorporate(CorporateDto request, String username) throws Exception {
 		CorporateEntity corporate = this.corporateRepo.findByCorporateCode(request.getCorporateCode());
 		if (corporate == null) {
 			corporate = new CorporateEntity();
@@ -83,17 +82,10 @@ public class CorporateImplService extends CommonService {
 		corporate.setAddress(request.getAddress());
 		corporate.setTelpNumber(request.getTelpNumber());
 		corporate.setFaxNumber(request.getFaxNumber());
-		corporate = corporateRepo.saveAndFlush(corporate);
-
-		List<CorporateDto> publishDto = new ArrayList<CorporateDto>();
-		request.setId(corporate.getId());
-		request.setCorporateCode(corporate.getCorporateCode());
-		request.setCorporateName(corporate.getCorporateName());
-		publishDto.add(request);
-		return publishDto;
+		corporateRepo.saveAndFlush(corporate);
 	}
 
-	public List<CorporateDto> deleteCorporates(List<String> corporateCodes) throws Exception {
+	public void deleteCorporates(List<String> corporateCodes) throws Exception {
 		List<CorporateEntity> corporates = corporateRepo.findByCorporateCodeIn(corporateCodes);
 		try {
 			corporateRepo.deleteInBatch(corporates);			
@@ -102,15 +94,6 @@ public class CorporateImplService extends CommonService {
 		} catch (ConstraintViolationException e) {
 			throw new SystemErrorException(ErrorCode.ERR_SCR0009);
 		}
-		List<CorporateDto> publishDto = new ArrayList<CorporateDto>();		
-		corporates.forEach(entity->{
-			CorporateDto corporate = new CorporateDto();
-			corporate.setId(entity.getId());
-			corporate.setCorporateCode(entity.getCorporateCode());
-			corporate.setCorporateName(entity.getCorporateName());;
-			publishDto.add(corporate);
-		});
-		return publishDto;
 	}
 
 }

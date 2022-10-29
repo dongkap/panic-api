@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.PostConstruct;
@@ -55,6 +56,7 @@ public class WebPushNotificationImplService implements WebPushNotificationServic
 		pushService.setPrivateKey(privateKey);    	
     }
 
+	@Override
 	public void subscribe(WebSubscriptionDto subscription, String username) {
 		WebSubscriptionEntity subs = webSubscriptionRepo.findByUsername(username);
 		if(subs == null) {
@@ -69,8 +71,9 @@ public class WebPushNotificationImplService implements WebPushNotificationServic
 		webSubscriptionRepo.save(subs);
 	}
 
-	public void notify(PushNotificationDto message, String username) throws GeneralSecurityException, IOException, JoseException, ExecutionException, InterruptedException {
-		WebSubscriptionEntity subscription = webSubscriptionRepo.findByUsername(message.getTo());
+	@Override
+	public void privateMessage(PushNotificationDto message, String to) throws GeneralSecurityException, IOException, JoseException, ExecutionException, InterruptedException {
+		WebSubscriptionEntity subscription = webSubscriptionRepo.findByUsername(to);
 		NotificationPayloadDto payload = new NotificationPayloadDto();
 		payload.getNotification().setTitle(message.getTitle());
 		payload.getNotification().setBody(message.getBody());
@@ -83,6 +86,25 @@ public class WebPushNotificationImplService implements WebPushNotificationServic
 				subscription.getAuth(),
 				objectMapper.writeValueAsBytes(payload));
 		pushService.sendAsync(notification);
+	}
+
+	@Override
+	public void broadcast(PushNotificationDto message, List<String> to) throws GeneralSecurityException, IOException, JoseException, ExecutionException, InterruptedException {
+		List<WebSubscriptionEntity> subscriptions = webSubscriptionRepo.findByUsernameIn(to);
+		NotificationPayloadDto payload = new NotificationPayloadDto();
+		payload.getNotification().setTitle(message.getTitle());
+		payload.getNotification().setBody(message.getBody());
+		payload.getNotification().setTag(message.getTag());
+		payload.getNotification().setIcon(message.getIcon());
+		payload.getNotification().setData(objectMapper.writeValueAsString(message.getData()));
+		for(WebSubscriptionEntity subscription: subscriptions) {
+			Notification notification = new Notification(
+					subscription.getEndpoint(),
+					subscription.getP256dh(),
+					subscription.getAuth(),
+					objectMapper.writeValueAsBytes(payload));
+			pushService.sendAsync(notification);
+		}
 	}
 
 }

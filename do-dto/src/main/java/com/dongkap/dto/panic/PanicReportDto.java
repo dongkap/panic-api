@@ -3,6 +3,7 @@ package com.dongkap.dto.panic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dongkap.dto.common.BaseAuditDto;
 import com.dongkap.dto.file.FileMetadataDto;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class PanicReportDto extends BasePanicReportDto {
+public class PanicReportDto extends BaseAuditDto {
 
 	/**
 	 * 
@@ -31,8 +32,16 @@ public class PanicReportDto extends BasePanicReportDto {
 	private String idNumber;
 	private String month;
 	private Integer year;
-	private String regionalCode;
-	private String regionalName;
+	private Double latestLatitude;
+	private Double latestLongitude;
+	private String latestFormattedAddress;
+	private String latestProvince;
+	private String latestCity;
+	private String latestDistrict;
+	private String latestFileChecksum;
+	private String latestDeviceID;
+	private String latestDeviceName;
+	private String administrativeAreaShort;
 	private String emergencyCategory;
 	private String emergencyCategoryCode;
 	private String status;

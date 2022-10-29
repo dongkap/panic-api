@@ -51,6 +51,9 @@ public class EmployeeEntity extends BaseAuditEntity {
 	
 	@Column(name = "last_educational_level")
 	private String lastEducationLevel;
+	
+	@Column(name = "id_card_image")
+	private String idCardImage;
 
 	@OneToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
@@ -69,6 +72,10 @@ public class EmployeeEntity extends BaseAuditEntity {
 	@OneToOne(targetEntity = OccupationEntity.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "occupation_uuid", nullable = false)
 	private OccupationEntity occupation;
+
+	@OneToOne(targetEntity = RegionalEntity.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "regional_uuid", nullable = false)
+	private RegionalEntity regional;
 
 	@OneToOne(targetEntity = CorporateEntity.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "corporate_uuid", nullable = false)

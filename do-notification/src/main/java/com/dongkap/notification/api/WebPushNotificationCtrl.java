@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dongkap.common.aspect.ResponseSuccess;
 import com.dongkap.common.exceptions.BaseControllerException;
-import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.common.utils.SuccessCode;
-import com.dongkap.dto.notification.PushNotificationDto;
+import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.notification.WebSubscriptionDto;
 import com.dongkap.notification.service.WebPushNotificationImplService;
 
@@ -33,15 +32,6 @@ public class WebPushNotificationCtrl extends BaseControllerException {
     		@RequestBody WebSubscriptionDto subscription) throws Exception {
 		webPushNotificationService.subscribe(subscription, authentication.getName());
 		return new ResponseEntity<ApiBaseResponse>(new ApiBaseResponse(), SuccessCode.OK_SCR007.getStatus());
-    }
-
-	@ResponseSuccess(SuccessCode.OK_SCR008)
-    @RequestMapping(value = "/push/auth/send/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiBaseResponse> sendNotify(Authentication authentication,
-			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
-			@RequestBody PushNotificationDto message) throws Exception {
-		webPushNotificationService.notify(message, authentication.getName());
-		return new ResponseEntity<ApiBaseResponse>(new ApiBaseResponse(), SuccessCode.OK_SCR008.getStatus());
     }
 
 }

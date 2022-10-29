@@ -41,17 +41,20 @@ public class PersonalInfoEntity extends BaseAuditEntity {
     @Column(name = "personal_info_uuid", nullable = false, unique=true)
 	private String id;
 
-	@Column(name = "id_number", nullable = false)
+	@Column(name = "id_number", nullable = true)
 	private String idNumber;
 	
-	@Column(name = "gender", nullable = false)
+	@Column(name = "gender", nullable = true)
 	private String gender;
 	
-	@Column(name = "place_of_birth", nullable = false)
+	@Column(name = "place_of_birth", nullable = true)
 	private String placeOfBirth;
 	
-	@Column(name = "date_of_birth", nullable = false)
+	@Column(name = "date_of_birth", nullable = true)
 	private Date dateOfBirth;
+
+	@Column(name = "image", nullable = true)
+	private String image;
 
 	@OneToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid", nullable = false, updatable = false)

@@ -22,11 +22,12 @@ public class PersonalInfoDto extends BaseAuditDto {
 	private String idNumber;
 	private Integer age;
 	private String genderCode;
-	private String genderValue;
+	private String gender;
 	private String placeOfBirth;
 	private String dateOfBirth;
 	private Double height;
 	private Double weight;
 	private String bloodType;
+	private String image;
 
 }

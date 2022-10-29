@@ -67,11 +67,8 @@ public class PanicReportEntity extends BaseAuditEntity {
 	@Column(name = "year_report", nullable = false)
 	private Integer year;
 
-	@Column(name = "regional_code", nullable = true)
-	private String regionalCode;
-
-	@Column(name = "regional_name", nullable = true)
-	private String regionalName;
+	@Column(name = "administrative_area_short", nullable = true)
+	private String administrativeAreaShort;
 
     @Embedded
     @AttributeOverrides({

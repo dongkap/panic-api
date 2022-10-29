@@ -24,22 +24,24 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dongkap.common.exceptions.SystemErrorException;
-import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.common.service.CommonService;
 import com.dongkap.common.utils.DateUtil;
 import com.dongkap.common.utils.ErrorCode;
 import com.dongkap.common.utils.ParameterStatic;
+import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.common.CommonResponseDto;
 import com.dongkap.dto.common.FilterDto;
 import com.dongkap.dto.file.FileMetadataDto;
 import com.dongkap.dto.notification.FCMNotificationDto;
 import com.dongkap.dto.notification.PushNotificationDto;
-import com.dongkap.dto.panic.BasePanicReportDto;
+import com.dongkap.dto.panic.FindNearestDto;
 import com.dongkap.dto.panic.PanicReportDto;
-import com.dongkap.dto.security.PersonalDto;
+import com.dongkap.dto.panic.RequestPanicReportDto;
+import com.dongkap.dto.security.ProfileDto;
+import com.dongkap.feign.service.EmployeeService;
 import com.dongkap.feign.service.FileGenericService;
 import com.dongkap.feign.service.ParameterI18nService;
-import com.dongkap.feign.service.ProfilePersonalService;
+import com.dongkap.feign.service.ProfileService;
 import com.dongkap.feign.service.WebPushNotificationService;
 import com.dongkap.panic.dao.DeviceRepo;
 import com.dongkap.panic.dao.LocationRepo;
@@ -70,7 +72,10 @@ public class PanicReportImplService extends CommonService {
 	private DeviceRepo deviceRepo;
 
 	@Autowired
-	private ProfilePersonalService profilePersonalService;
+	private ProfileService profileService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	@Autowired
 	@Qualifier("fileEvidenceService")
@@ -82,8 +87,8 @@ public class PanicReportImplService extends CommonService {
 	@Autowired
 	private ParameterI18nService parameterI18nService;
 	
-    @Value("${dongkap.notif.user}")
-    protected String userNotify;
+	@Value("#{new Boolean('${dongkap.notif.default.is-admin}')}")
+    protected Boolean isNotifToAdmin;
 	
     @Value("${dongkap.notif.icon}")
     protected String iconNotify;
@@ -92,7 +97,7 @@ public class PanicReportImplService extends CommonService {
     protected String tagNotify;
 
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
-	public ApiBaseResponse doPostPanicReport(BasePanicReportDto dto, MultipartFile evidence, Authentication authentication, String p_locale) throws Exception {
+	public ApiBaseResponse doPostPanicReport(RequestPanicReportDto dto, MultipartFile evidence, Authentication authentication, String p_locale) throws Exception {
 		if (evidence != null && dto != null) {
 			FileMetadataDto fileEvidence = new FileMetadataDto(); 
 			try {
@@ -100,43 +105,47 @@ public class PanicReportImplService extends CommonService {
 			} catch (Exception e) {
 				throw new SystemErrorException(ErrorCode.ERR_SCR0010);				
 			}
-			Point coordinate = new Point(dto.getLatestLatitude(), dto.getLatestLongitude());
+			
+			Point coordinate = new Point(dto.getLatitude(), dto.getLongitude());
 			LocationEntity location = locationRepo.findByCoordinate(coordinate);
 			if(location == null) {
 				location = new LocationEntity();
 				location.setCoordinate(coordinate);
-				location.setFormattedAddress(dto.getLatestFormattedAddress());
-				location.setProvince(dto.getLatestProvince());
-				location.setCity(dto.getLatestCity());
-				location.setDistrict(dto.getLatestDistrict());
+				location.setFormattedAddress(dto.getFormattedAddress());
+				location.setProvince(dto.getProvince());
+				location.setCity(dto.getCity());
+				location.setDistrict(dto.getDistrict());
 				location = locationRepo.saveAndFlush(location);
 			}
+			
 			DeviceEntity device = new DeviceEntity();
-			device.setDeviceID(dto.getLatestDeviceID());
-			device.setDeviceName(dto.getLatestDeviceName());
+			device.setDeviceID(dto.getDeviceID());
+			device.setDeviceName(dto.getDeviceName());
 			device = deviceRepo.saveAndFlush(device);
+			
 			PanicReportEntity panic = panicReportRepo.findById(authentication.getName() + DateUtil.DATE.format(new Date())).orElse(null);
 			if(panic == null) {
-				PersonalDto personal = profilePersonalService.getProfilePersonal(authentication, p_locale);
+				ProfileDto profile = profileService.getProfile(authentication, p_locale);
 				panic =  new PanicReportEntity();
-				panic.setPanicCode(personal.getUsername() + DateUtil.DATE.format(new Date()));
-				panic.setUsername(personal.getUsername());
-				panic.setName(personal.getName());
-				panic.setGender(personal.getGenderCode());
-				panic.setAge(personal.getAge());
-				panic.setPhoneNumber(personal.getPhoneNumber());
-				panic.setIdNumber(personal.getIdNumber());
+				panic.setPanicCode(profile.getUsername() + DateUtil.DATE.format(new Date()));
+				panic.setUsername(profile.getUsername());
+				panic.setName(profile.getName());
+				panic.setPhoneNumber(profile.getContact().getPhoneNumber());
+				panic.setGender(profile.getPersonalInfo().getGenderCode());
+				panic.setAge(profile.getPersonalInfo().getAge());
+				panic.setIdNumber(profile.getPersonalInfo().getIdNumber());
 				panic.setMonth(ParameterStatic.MONTH_PARAMETER + DateUtil.getMonthNumber(p_locale, new Date()));
 				panic.setYear(DateUtil.getYear(p_locale, new Date()));
 			}
 			panic.setLatestCoordinate(coordinate);
-			panic.setLatestFormattedAddress(dto.getLatestFormattedAddress());
-			panic.setLatestProvince(dto.getLatestProvince());
-			panic.setLatestCity(dto.getLatestCity());
-			panic.setLatestDistrict(dto.getLatestDistrict());
+			panic.setLatestFormattedAddress(dto.getFormattedAddress());
+			panic.setLatestProvince(dto.getProvince());
+			panic.setLatestCity(dto.getCity());
+			panic.setLatestDistrict(dto.getDistrict());
 			panic.setLatestFileChecksum(fileEvidence.getChecksum());
-			panic.setLatestDeviceID(dto.getLatestDeviceID());
-			panic.setLatestDeviceName(dto.getLatestDeviceName());
+			panic.setLatestDeviceID(dto.getDeviceID());
+			panic.setLatestDeviceName(dto.getDeviceName());
+			panic.setAdministrativeAreaShort(dto.getAdministrativeAreaShort());
 			panic = panicReportRepo.saveAndFlush(panic);
 			PanicDetailEntity panicDetail = new PanicDetailEntity();
 			panicDetail.setFileChecksum(fileEvidence.getChecksum());
@@ -144,15 +153,24 @@ public class PanicReportImplService extends CommonService {
 			panicDetail.setLocation(location);
 			panicDetail.setDevice(device);
 			panicDetailRepo.saveAndFlush(panicDetail);
+			
+			FindNearestDto findNearest = new FindNearestDto();
+			findNearest.setAdministrativeAreaShort(dto.getAdministrativeAreaShort());
+			findNearest.setLatitude(dto.getLatitude());
+			findNearest.setLongitude(dto.getLongitude());
+			List<String> to = new ArrayList<String>();
+			if(isNotifToAdmin) {
+				to = this.employeeService.getEmployeeNearestIncludeAdmin(findNearest, p_locale);
+			} else {
+				to = this.employeeService.getEmployeeNearest(findNearest, p_locale);
+			}
 			PushNotificationDto message = new PushNotificationDto();
 			message.setTitle(authentication.getName());
 			message.setBody(panic.getLatestFormattedAddress());
 			message.setData(toObject(panic, p_locale));
 			message.setTag(tagNotify);
 			message.setIcon(iconNotify);
-			message.setFrom(authentication.getName());
-			message.setTo(userNotify);
-			webPushNotificationService.notify(message, authentication.getName());
+			webPushNotificationService.broadcast(message, to);
 			return null;
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);

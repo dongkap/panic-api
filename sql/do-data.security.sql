@@ -319,13 +319,13 @@ INSERT INTO security.sec_corporate(corporate_uuid, corporate_code, corporate_nam
 -- Dumping data for table sec_regional
 --
 
-INSERT INTO security.sec_regional (regional_uuid, regional_code, regional_name, "version", is_active, created_date, created_by, modified_date, modified_by) VALUES
-('314d8874-eaf2-4926-a24d-627f25c21f2c', 'POLDA_METRO', 'Polda Metro Jakarta Raya', 0, true, '2018-12-02 20:52:28', 'system', NULL, NULL),
-('61cce2de-866c-488e-8e74-4d96e41c42e9', 'POLDA_BANTEN', 'Polda Banten', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('f014dadb-15bc-4581-b26f-cb48fce847c3', 'POLDA_JABAR', 'Polda Jawa Barat', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('94689475-4b90-4b0b-929a-3e41e40f574a', 'POLDA_JATENG', 'Polda Jawa Tengah', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('53fe122a-7dec-4a42-aaa1-2ea38a121044', 'POLDA_JATIM', 'Polda Jawa Timur', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('d877a83f-2a3d-403e-b1fd-1b8e3b86a950', 'POLDA_BALI', 'Polda Bali', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL);
+INSERT INTO security.sec_regional (regional_uuid, regional_name, "version", is_active, created_date, created_by, modified_date, modified_by) VALUES
+('314d8874-eaf2-4926-a24d-627f25c21f2c', 'Polda Metro Jakarta Raya', 0, true, '2018-12-02 20:52:28', 'system', NULL, NULL),
+('61cce2de-866c-488e-8e74-4d96e41c42e9', 'Polda Banten', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('f014dadb-15bc-4581-b26f-cb48fce847c3', 'Polda Jawa Barat', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('94689475-4b90-4b0b-929a-3e41e40f574a', 'Polda Jawa Tengah', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('53fe122a-7dec-4a42-aaa1-2ea38a121044', 'Polda Jawa Timur', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('d877a83f-2a3d-403e-b1fd-1b8e3b86a950', 'Polda Bali', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL);
 
 --
 -- Dumping data for table sec_occupation

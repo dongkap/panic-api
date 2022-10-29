@@ -136,7 +136,6 @@ CREATE TABLE security.sec_user (
 	activate_code varchar(100),
 	activate_expired timestamp,
 	raw text,
-	image varchar(250),
 	authority_default varchar(100),
 	"app_code" varchar(50) DEFAULT 'DONGKAP',
 	"version" int DEFAULT 0 NOT NULL,
@@ -153,6 +152,8 @@ CREATE TABLE security.sec_r_user_role (
 );
 CREATE TABLE security.sec_contact_user (
 	contact_user_uuid varchar(36) NOT NULL,
+	phone_number varchar(20),
+	administrative_area_name varchar(255),
 	address text,
 	country varchar(200),
 	country_code varchar(100),
@@ -165,7 +166,6 @@ CREATE TABLE security.sec_contact_user (
 	sub_district varchar(200),
 	sub_district_code varchar(100),
 	zipcode varchar(200),
-	phone_number varchar(20),
 	description text,
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,
@@ -178,13 +178,14 @@ CREATE TABLE security.sec_contact_user (
 );
 CREATE TABLE security.sec_personal_info (
 	personal_info_uuid varchar(36) NOT NULL,
-	id_number varchar(50) NOT NULL,
-	gender varchar(20) NOT NULL,
-	place_of_birth varchar(50) NOT NULL,
-	date_of_birth date NOT NULL,
+	id_number varchar(50),
+	gender varchar(20),
+	place_of_birth varchar(50),
+	date_of_birth date,
 	height numeric(5,2),
 	weight numeric(5,2),
 	blood_type varchar(3),
+	image varchar(250),
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,
 	created_date timestamp DEFAULT CURRENT_TIMESTAMP,
@@ -244,10 +245,11 @@ CREATE TABLE security.sec_corporate (
 );
 CREATE TABLE security.sec_regional (
 	regional_uuid varchar(36) NOT NULL,
-	regional_code varchar(50) NOT NULL,
 	regional_name varchar(255) NOT NULL,
 	latitude numeric,
 	longitude numeric,
+	administrative_area_short varchar(255),
+	administrative_area_name varchar(255),
 	address text,
 	telp_number varchar(20),
 	fax_number varchar(20),
@@ -274,7 +276,7 @@ CREATE TABLE security.sec_occupation (
 CREATE TABLE security.sec_employee (
 	employee_uuid varchar(36) NOT NULL,
 	id_employee varchar(50) NOT NULL,
-	last_educational_level varchar(50) DEFAULT 'EDUCATIONAL_LEVEL.NO_EDUCATION',
+	last_educational_level varchar(50) DEFAULT 'N/A',
 	id_card_image varchar(250),
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,
@@ -295,7 +297,6 @@ ALTER TABLE security.sec_user ADD CONSTRAINT username UNIQUE (username);
 ALTER TABLE security.sec_user ADD CONSTRAINT email UNIQUE (email);
 ALTER TABLE security.sec_personal_info ADD CONSTRAINT id_number UNIQUE (id_number);
 ALTER TABLE security.sec_corporate ADD CONSTRAINT corporate_code UNIQUE (corporate_code);
-ALTER TABLE security.sec_regional ADD CONSTRAINT regional_code UNIQUE (regional_code);
 
 ALTER TABLE security.sec_menu
 	ADD FOREIGN KEY (parent_uuid) 

@@ -27,7 +27,7 @@ import com.dongkap.common.utils.SuccessCode;
 import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.common.CommonResponseDto;
 import com.dongkap.dto.common.FilterDto;
-import com.dongkap.dto.panic.BasePanicReportDto;
+import com.dongkap.dto.panic.RequestPanicReportDto;
 import com.dongkap.dto.panic.PanicReportDto;
 import com.dongkap.panic.service.PanicReportImplService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,9 +48,8 @@ public class PanicReportController extends BaseControllerException {
 			@RequestPart @Valid MultipartFile evidence,
 			@RequestParam @Valid String data,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-    	// objectMapper.configure(Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, false);
     	data = data.replaceAll("\\\\", ""); 
-    	BasePanicReportDto dto = objectMapper.readValue(data, BasePanicReportDto.class);
+    	RequestPanicReportDto dto = objectMapper.readValue(data, RequestPanicReportDto.class);
 		return new ResponseEntity<ApiBaseResponse>(this.panicReportService.doPostPanicReport(dto, evidence, authentication, locale), HttpStatus.OK);
 	}
 	

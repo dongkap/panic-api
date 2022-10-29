@@ -18,8 +18,10 @@ import org.springframework.util.StringUtils;
 import com.dongkap.common.utils.AuthorizationProvider;
 import com.dongkap.common.utils.ErrorCode;
 import com.dongkap.dto.social.OAuth2UserInfoDto;
+import com.dongkap.security.dao.PersonalInfoRepo;
 import com.dongkap.security.dao.RoleRepo;
 import com.dongkap.security.dao.UserRepo;
+import com.dongkap.security.entity.PersonalInfoEntity;
 import com.dongkap.security.entity.RoleEntity;
 import com.dongkap.security.entity.SettingsEntity;
 import com.dongkap.security.entity.UserEntity;
@@ -37,6 +39,9 @@ public class GrantOAuth2UserImplService extends DefaultOAuth2UserService {
 	
 	@Autowired
 	private RoleRepo roleRepo;
+
+	@Autowired
+	private PersonalInfoRepo personalInfoRepo;
 	
 	@Value("${dongkap.app-code.default}")
 	private String appCode;
@@ -86,27 +91,39 @@ public class GrantOAuth2UserImplService extends DefaultOAuth2UserService {
 
     private UserEntity doRegisterUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfoDto oAuth2UserInfo) {
     	UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(oAuth2UserInfo.getId());
+        userEntity.setUsername(oAuth2UserInfo.getEmail());
         userEntity.setPassword("N/A");
         userEntity.setEmail(oAuth2UserInfo.getEmail());
         userEntity.setFullname(oAuth2UserInfo.getName());
         userEntity.setProvider(AuthorizationProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()).toString());
-        userEntity.setImage(oAuth2UserInfo.getImageUrl());
         userEntity.setAuthorityDefault(ROLE_END);
+        userEntity.setAppCode(appCode);
 		RoleEntity role = this.roleRepo.findByAuthority(ROLE_END);
         userEntity.getRoles().add(role);
 		SettingsEntity settingsEntity = new SettingsEntity();
 		settingsEntity.setUser(userEntity);
 		userEntity.setSettings(settingsEntity);
-        return this.userRepo.saveAndFlush(userEntity);
+		userEntity = this.userRepo.saveAndFlush(userEntity);
+		PersonalInfoEntity personalInfo = this.personalInfoRepo.findByUser_Username(oAuth2UserInfo.getEmail());
+		if(personalInfo == null) {
+			personalInfo = new PersonalInfoEntity();	
+		}
+        personalInfo.setImage(oAuth2UserInfo.getImageUrl());
+        this.personalInfoRepo.saveAndFlush(personalInfo);		
+        return userEntity;
     }
 
     private UserEntity doUpdateUser(UserEntity userEntity, OAuth2UserInfoDto oAuth2UserInfo) {
     	if(userEntity.getFullname() == null)
     		userEntity.setFullname(oAuth2UserInfo.getName());
-    	if(userEntity.getImage() == null)
-            userEntity.setImage(oAuth2UserInfo.getImageUrl());
-        return this.userRepo.saveAndFlush(userEntity);
+		userEntity = this.userRepo.saveAndFlush(userEntity);
+		PersonalInfoEntity personalInfo = this.personalInfoRepo.findByUser_Username(userEntity.getEmail());
+		if(personalInfo == null) {
+			personalInfo = new PersonalInfoEntity();	
+		}
+        personalInfo.setImage(oAuth2UserInfo.getImageUrl());
+        this.personalInfoRepo.saveAndFlush(personalInfo);	
+        return userEntity;
     }
 
 }

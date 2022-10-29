@@ -1,5 +1,7 @@
 package com.dongkap.dto.security;
 
+import com.dongkap.dto.common.BaseAuditDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,18 +13,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class PersonalDto extends ProfileDto {
+public class EmergencyContactDto extends BaseAuditDto {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1742415621743889509L;
-	private Integer age;
-	private String idNumber;
-	private String genderCode;
-	private String gender;
-	private String placeOfBirth;
-	private String dateOfBirth;
 	private String referenceName;
 	private String referenceAddress;
 	private String referencePhoneNumber;

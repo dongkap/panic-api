@@ -31,8 +31,6 @@ public class FakeReportDto extends BaseAuditDto {
 	private String idNumber;
 	private String month;
 	private Integer year;
-	private String regionalCode;
-	private String regionalName;
 	private Double latestLatitude;
 	private Double latestLongitude;
 	private String latestFormattedAddress;
@@ -42,7 +40,8 @@ public class FakeReportDto extends BaseAuditDto {
 	private String latestFileChecksum;
 	private String latestDeviceID;
 	private String latestDeviceName;
-	private String urgencyCategory;
+	private String administrativeAreaShort;
+	private String emergencyCategory;
 	private String status;
 	private List<FakeDetailDto> fakeDetails = new ArrayList<FakeDetailDto>();
 
