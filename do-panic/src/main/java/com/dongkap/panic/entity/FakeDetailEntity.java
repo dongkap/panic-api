@@ -44,11 +44,11 @@ public class FakeDetailEntity extends BaseAuditEntity {
 	private String fileChecksum;
 
 	@ManyToOne(targetEntity = FakeReportEntity.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "fake_code", nullable = false, updatable = false)
+	@JoinColumn(name = "fake_uuid", nullable = false, updatable = false)
 	private FakeReportEntity fakeReport;
 
 	@ManyToOne(targetEntity = DeviceEntity.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "device_id", nullable = false, updatable = false)
+	@JoinColumn(name = "device_uuid", nullable = false, updatable = false)
 	private DeviceEntity device;
 
 	@OneToOne(targetEntity = LocationEntity.class, fetch = FetchType.LAZY)

@@ -1,10 +1,8 @@
 package com.dongkap.dto.panic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dongkap.dto.common.BaseAuditDto;
-import com.dongkap.dto.file.FileMetadataDto;
+import com.dongkap.dto.security.ContactUserDto;
+import com.dongkap.dto.security.PersonalInfoDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,13 +21,8 @@ public class PanicReportDto extends BaseAuditDto {
 	 * 
 	 */
 	private static final long serialVersionUID = -2442773369159964802L;
+	private String id;
 	private String panicCode;
-	private String username;
-	private String name;
-	private String gender;
-	private String phoneNumber;
-	private Integer age;
-	private String idNumber;
 	private String month;
 	private Integer year;
 	private Double latestLatitude;
@@ -46,7 +39,10 @@ public class PanicReportDto extends BaseAuditDto {
 	private String emergencyCategoryCode;
 	private String status;
 	private String statusCode;
-	private FileMetadataDto fileMetadata;
-	private List<PanicDetailDto> panicDetails = new ArrayList<PanicDetailDto>();
+	private String username;
+	private String name;
+	private String email;
+	private ContactUserDto contact = new ContactUserDto();
+	private PersonalInfoDto personalInfo = new PersonalInfoDto();
 
 }

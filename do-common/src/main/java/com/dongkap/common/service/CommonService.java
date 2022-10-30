@@ -22,9 +22,9 @@ public class CommonService {
             Sort sort = null;
             for (Map.Entry<String, List<String>> direction : order.entrySet()) {
                 if (Direction.ASC.toString().equalsIgnoreCase(direction.getKey())) {
-                    sort = Sort.by(Direction.ASC, (String[]) direction.getValue().toArray());
+                    sort = Sort.by(Direction.ASC, (String[]) direction.getValue().toArray(new String[direction.getValue().size()]));
                 } else {
-                    sort = Sort.by(Direction.DESC, (String[]) direction.getValue().toArray());
+                    sort = Sort.by(Direction.DESC, (String[]) direction.getValue().toArray(new String[direction.getValue().size()]));
                 }
             }
             return PageRequest.of(page, limit, sort);

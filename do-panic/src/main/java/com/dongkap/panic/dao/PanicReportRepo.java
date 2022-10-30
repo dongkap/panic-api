@@ -12,6 +12,9 @@ import com.dongkap.panic.entity.PanicReportEntity;
 
 public interface PanicReportRepo extends JpaRepository<PanicReportEntity, String>, JpaSpecificationExecutor<PanicReportEntity> {
 	
+	@Query("SELECT pr FROM PanicReportEntity pr JOIN FETCH pr.panicDetails pd JOIN FETCH pd.location l JOIN FETCH pd.device d WHERE pr.id = :id AND LOWER(pr.username) = :username")
+	PanicReportEntity loadPanicReportByIdUsername(@Param("id") String id, @Param("username") String username);
+	
 	@Query("SELECT pr FROM PanicReportEntity pr JOIN FETCH pr.panicDetails pd JOIN FETCH pd.location l JOIN FETCH pd.device d WHERE pr.panicCode = :code AND LOWER(pr.username) = :username")
 	PanicReportEntity loadPanicReportByCodeUsername(@Param("code") String code, @Param("username") String username);
 	

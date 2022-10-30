@@ -23,7 +23,7 @@ public class PanicDetailController extends BaseControllerException {
 	@Autowired
 	private PanicDetailImplService panicDetailService;
 
-	@RequestMapping(value = "/vw/post/datatable/panic-detail/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/vw/auth/datatable/panic-detail/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommonResponseDto<PanicDetailDto>> getDatatablePanicDetail(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter) throws Exception {
 		return new ResponseEntity<CommonResponseDto<PanicDetailDto>>(this.panicDetailService.getDatatablePanicDetail(filter), HttpStatus.OK);

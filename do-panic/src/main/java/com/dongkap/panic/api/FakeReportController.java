@@ -38,7 +38,7 @@ public class FakeReportController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(this.fakeReportService.doFakeReport(dto, authentication, locale), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/vw/post/datatable/fake-reports/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/vw/auth/datatable/fake-reports/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommonResponseDto<FakeReportDto>> getDatatableFakeReport(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {

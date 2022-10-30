@@ -22,6 +22,7 @@ public class FakeReportDto extends BaseAuditDto {
 	 * 
 	 */
 	private static final long serialVersionUID = -7550850975117219030L;
+	private String id;
 	private String fakeCode;
 	private String username;
 	private String name;

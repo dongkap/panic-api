@@ -10,6 +10,8 @@ import com.dongkap.dto.security.ProfileDto;
 
 public interface ProfileService {
 	
+	public ProfileDto getProfile(String p_username, String p_locale) throws Exception;
+	
 	public ProfileDto getProfile(Authentication p_authentication, String p_locale) throws Exception;
 	
 	public ContactUserDto getContact(Authentication p_authentication, String p_locale) throws Exception;

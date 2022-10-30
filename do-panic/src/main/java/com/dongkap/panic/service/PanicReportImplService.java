@@ -169,9 +169,9 @@ public class PanicReportImplService extends CommonService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 	
-	public PanicReportDto getPanicReport(String code, Authentication authentication, String p_locale) throws Exception {
-		if(code != null) {
-			PanicReportEntity panic = panicReportRepo.loadPanicReportByCodeUsername(code, authentication.getName());
+	public PanicReportDto getPanicReport(String id, Authentication authentication, String p_locale) throws Exception {
+		if(id != null) {
+			PanicReportEntity panic = panicReportRepo.findById(id).orElse(new PanicReportEntity());
 			return toObject(panic, p_locale);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
@@ -239,15 +239,8 @@ public class PanicReportImplService extends CommonService {
 	
 	private PanicReportDto toObject(PanicReportEntity panic, String p_locale) throws Exception {
 		PanicReportDto response = new PanicReportDto();
+		response.setId(panic.getId());
 		response.setPanicCode(panic.getPanicCode());
-		response.setUsername(panic.getUsername());
-		response.setName(panic.getName());
-		Map<String, Object> temp = new HashMap<String, Object>();
-		temp.put("parameterCode", panic.getGender());
-		response.setGender(parameterI18nService.getParameter(temp, p_locale).getParameterValue());
-		response.setAge(panic.getAge());
-		response.setPhoneNumber(panic.getPhoneNumber());
-		response.setIdNumber(panic.getIdNumber());
 		response.setMonth(DateUtil.getMonthName(p_locale, panic.getMonth()));
 		response.setYear(panic.getYear());
 		response.setLatestLatitude(panic.getLatestCoordinate().getX());
@@ -259,7 +252,9 @@ public class PanicReportImplService extends CommonService {
 		response.setLatestFileChecksum(panic.getLatestFileChecksum());
 		response.setLatestDeviceID(panic.getLatestDeviceID());
 		response.setLatestDeviceName(panic.getLatestDeviceName());
+		response.setAdministrativeAreaShort(panic.getAdministrativeAreaShort());
 		response.setEmergencyCategoryCode(panic.getEmergencyCategory());
+		Map<String, Object> temp = new HashMap<String, Object>();
 		if(panic.getEmergencyCategory() != null) {
 			temp.put("parameterCode", panic.getEmergencyCategory());
 			try {
@@ -277,7 +272,15 @@ public class PanicReportImplService extends CommonService {
 		response.setCreatedBy(panic.getCreatedBy());
 		response.setModifiedDate(panic.getModifiedDate());
 		response.setModifiedBy(panic.getModifiedBy());
-		response.setFileMetadata(fileEvidenceService.getFileInfo(panic.getLatestFileChecksum()));
+
+		ProfileDto profile = this.profileService.getProfile(panic.getUsername(), p_locale);
+		response.setUsername(profile.getUsername());
+		response.setName(profile.getName());
+		response.setEmail(profile.getEmail());
+		response.setContact(profile.getContact());
+		response.getContact().setPhoneNumber(panic.getPhoneNumber());
+		response.setPersonalInfo(profile.getPersonalInfo());
+		response.getPersonalInfo().setAge(panic.getAge());
 		return response;
 	}
 

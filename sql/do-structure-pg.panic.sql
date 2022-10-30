@@ -15,6 +15,7 @@ CREATE TABLE panic.panic_location (
 	PRIMARY KEY (location_uuid)
 );
 CREATE TABLE panic.panic_device (
+	device_uuid varchar(36) NOT NULL,
 	device_id varchar(100),
 	device_name varchar(100),
 	"version" int DEFAULT 0 NOT NULL,
@@ -23,10 +24,11 @@ CREATE TABLE panic.panic_device (
 	created_by varchar(150),
 	modified_date timestamp,
 	modified_by varchar(150),
-	PRIMARY KEY (device_id)
+	PRIMARY KEY (device_uuid)
 );
 CREATE TABLE panic.panic_report (
-	panic_code varchar(50) NOT NULL,
+	panic_uuid varchar(36) NOT NULL,
+	panic_code varchar(255) NOT NULL,
 	username varchar(50) NOT NULL,
 	fullname varchar(75) NOT NULL,
 	gender varchar(20) NOT NULL,
@@ -53,7 +55,7 @@ CREATE TABLE panic.panic_report (
 	created_by varchar(150),
 	modified_date timestamp,
 	modified_by varchar(150),
-	PRIMARY KEY (panic_code)
+	PRIMARY KEY (panic_uuid)
 );
 CREATE TABLE panic.panic_detail (
 	panic_detail_uuid varchar(36) NOT NULL,
@@ -64,13 +66,14 @@ CREATE TABLE panic.panic_detail (
 	created_by varchar(150),
 	modified_date timestamp,
 	modified_by varchar(150),
-	panic_code varchar(50),
-	device_id varchar(100),
+	panic_uuid varchar(36) NOT NULL,
+	device_uuid varchar(36),
 	location_uuid varchar(36),
 	PRIMARY KEY (panic_detail_uuid)
 );
 CREATE TABLE panic.fake_report (
-	fake_code varchar(50) NOT NULL,
+	fake_uuid varchar(36) NOT NULL,
+	fake_code varchar(255) NOT NULL,
 	username varchar(50) NOT NULL,
 	fullname varchar(75) NOT NULL,
 	gender varchar(20) NOT NULL,
@@ -97,7 +100,7 @@ CREATE TABLE panic.fake_report (
 	created_by varchar(150),
 	modified_date timestamp,
 	modified_by varchar(150),
-	PRIMARY KEY (fake_code)
+	PRIMARY KEY (fake_uuid)
 );
 CREATE TABLE panic.fake_detail (
 	fake_detail_uuid varchar(36) NOT NULL,
@@ -108,31 +111,34 @@ CREATE TABLE panic.fake_detail (
 	created_by varchar(150),
 	modified_date timestamp,
 	modified_by varchar(150),
-	fake_code varchar(50),
-	device_id varchar(100),
+	fake_uuid varchar(36) NOT NULL,
+	device_uuid varchar(36),
 	location_uuid varchar(36),
 	PRIMARY KEY (fake_detail_uuid)
 );
 
-ALTER TABLE panic.panic_detail
-	ADD FOREIGN KEY (panic_code) 
-	REFERENCES panic.panic_report (panic_code);
+ALTER TABLE panic.panic_report ADD CONSTRAINT panic_code UNIQUE (panic_code);
+ALTER TABLE panic.fake_report ADD CONSTRAINT fake_code UNIQUE (fake_code);
 
 ALTER TABLE panic.panic_detail
-	ADD FOREIGN KEY (device_id) 
-	REFERENCES panic.panic_device (device_id);
+	ADD FOREIGN KEY (panic_uuid) 
+	REFERENCES panic.panic_report (panic_uuid);
+
+ALTER TABLE panic.panic_detail
+	ADD FOREIGN KEY (device_uuid) 
+	REFERENCES panic.panic_device (device_uuid);
 
 ALTER TABLE panic.panic_detail
 	ADD FOREIGN KEY (location_uuid) 
 	REFERENCES panic.panic_location (location_uuid);
 
 ALTER TABLE panic.fake_detail
-	ADD FOREIGN KEY (fake_code) 
-	REFERENCES panic.fake_report (fake_code);
+	ADD FOREIGN KEY (fake_uuid) 
+	REFERENCES panic.fake_report (fake_uuid);
 
 ALTER TABLE panic.fake_detail
-	ADD FOREIGN KEY (device_id) 
-	REFERENCES panic.panic_device (device_id);
+	ADD FOREIGN KEY (device_uuid) 
+	REFERENCES panic.panic_device (device_uuid);
 
 ALTER TABLE panic.fake_detail
 	ADD FOREIGN KEY (location_uuid) 

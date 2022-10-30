@@ -43,11 +43,11 @@ public class PanicDetailEntity extends BaseAuditEntity {
 	private String fileChecksum;
 
 	@ManyToOne(targetEntity = PanicReportEntity.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "panic_code", nullable = false, updatable = false)
+	@JoinColumn(name = "panic_uuid", nullable = false, updatable = false)
 	private PanicReportEntity panicReport;
 
 	@ManyToOne(targetEntity = DeviceEntity.class, fetch = FetchType.EAGER)
-	@JoinColumn(name = "device_id", nullable = false, updatable = false)
+	@JoinColumn(name = "device_uuid", nullable = false, updatable = false)
 	private DeviceEntity device;
 
 	@ManyToOne(targetEntity = LocationEntity.class, fetch = FetchType.EAGER)

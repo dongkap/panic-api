@@ -10,12 +10,14 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.dongkap.common.utils.SchemaDatabase;
 
@@ -38,15 +40,20 @@ public class FakeReportEntity extends BaseAuditEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -2442773369159964802L;
-	
+
 	@Id
-	@Column(name = "fake_code", nullable = false, unique = true, length = 50)
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+    @Column(name = "fake_uuid", nullable = false, unique=true)
+	private String id;
+
+	@Column(name = "fake_code", nullable = false, unique = true)
 	private String fakeCode;
 
 	@Column(name = "username", nullable = false)
 	private String username;
 
-	@Column(name = "fullname", nullable = false, length = 75)
+	@Column(name = "fullname", nullable = false)
 	private String name;
 	
 	@Column(name = "gender", nullable = false)

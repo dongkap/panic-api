@@ -33,6 +33,9 @@ public class PanicDetailSpecification {
 						Object value = filter.getValue();
 						if (value != null) {
 							switch (key) {
+								case "id" :
+									predicate = builder.and(predicate, builder.equal(root.join("panicReport").<String>get(key), value.toString()));
+									break;
 								case "panicCode" :
 									predicate = builder.and(predicate, builder.equal(root.join("panicReport").<String>get(key), value.toString()));
 									break;

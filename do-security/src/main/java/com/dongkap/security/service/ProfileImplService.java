@@ -25,13 +25,18 @@ import com.dongkap.feign.service.ParameterI18nService;
 import com.dongkap.feign.service.ProfileService;
 import com.dongkap.security.dao.ContactUserRepo;
 import com.dongkap.security.dao.PersonalInfoRepo;
+import com.dongkap.security.dao.UserRepo;
 import com.dongkap.security.entity.ContactUserEntity;
 import com.dongkap.security.entity.PersonalInfoEntity;
+import com.dongkap.security.entity.UserEntity;
 
 @Service("profileService")
 public class ProfileImplService implements ProfileService {
 
 	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private UserRepo userRepo;
 
 	@Autowired
 	private ContactUserRepo contactUserRepo;
@@ -41,6 +46,21 @@ public class ProfileImplService implements ProfileService {
 	
 	@Autowired
 	private ParameterI18nService parameterI18nService;
+	
+	@Override
+	public ProfileDto getProfile(String p_username, String p_locale) throws Exception {
+		if (p_username != null) {
+			UserEntity user = userRepo.loadByUsername(p_username);
+			ProfileDto profileDto = new ProfileDto();
+			profileDto.setUsername(user.getUsername());
+			profileDto.setEmail(user.getEmail());
+			profileDto.setName(user.getName());
+			profileDto.setContact(this.getContact(p_username, p_locale));
+			profileDto.setPersonalInfo(this.getPersonalInfo(p_username, p_locale));
+			return profileDto;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
 	
 	@Override
 	public ProfileDto getProfile(Authentication p_authentication, String p_locale) throws Exception {
@@ -61,50 +81,58 @@ public class ProfileImplService implements ProfileService {
 	public ContactUserDto getContact(Authentication p_authentication, String p_locale) throws Exception {
 		UserPrincipal user = (UserPrincipal) p_authentication.getPrincipal();
 		if (user.getUsername() != null) {
-			ContactUserDto contactUserDto = new ContactUserDto();
-			ContactUserEntity contactUser = this.contactUserRepo.findByUser_Username(user.getUsername());
-			if(contactUser != null) {
-				contactUserDto.setAdministrativeAreaShort(contactUser.getAdministrativeAreaShort());
-				contactUserDto.setAddress(contactUser.getAddress());
-				contactUserDto.setCountry(contactUser.getCountry());
-				contactUserDto.setProvince(contactUser.getProvince());
-				contactUserDto.setCity(contactUser.getCity());
-				contactUserDto.setDistrict(contactUser.getDistrict());
-				contactUserDto.setSubDistrict(contactUser.getSubDistrict());
-				contactUserDto.setZipcode(contactUser.getZipcode());
-				contactUserDto.setPhoneNumber(contactUser.getPhoneNumber());
-			}
-			return contactUserDto;
+			return getContact(user.getUsername(), p_locale);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	private ContactUserDto getContact(String p_username, String p_locale) throws Exception {
+		ContactUserDto contactUserDto = new ContactUserDto();
+		ContactUserEntity contactUser = this.contactUserRepo.findByUser_Username(p_username);
+		if(contactUser != null) {
+			contactUserDto.setAdministrativeAreaShort(contactUser.getAdministrativeAreaShort());
+			contactUserDto.setAddress(contactUser.getAddress());
+			contactUserDto.setCountry(contactUser.getCountry());
+			contactUserDto.setProvince(contactUser.getProvince());
+			contactUserDto.setCity(contactUser.getCity());
+			contactUserDto.setDistrict(contactUser.getDistrict());
+			contactUserDto.setSubDistrict(contactUser.getSubDistrict());
+			contactUserDto.setZipcode(contactUser.getZipcode());
+			contactUserDto.setPhoneNumber(contactUser.getPhoneNumber());
+		}
+		return contactUserDto;
 	}
 
 	@Override
 	public PersonalInfoDto getPersonalInfo(Authentication p_authentication, String p_locale) throws Exception {
 		UserPrincipal user = (UserPrincipal) p_authentication.getPrincipal();
 		if (user.getUsername() != null) {
-			PersonalInfoDto personalInfoDto = new PersonalInfoDto();
-			PersonalInfoEntity personalInfo = this.personalInfoRepo.findByUser_Username(user.getUsername());
-			if(personalInfo != null) {
-			    Calendar calDateOfBirth = Calendar.getInstance();
-			    calDateOfBirth.setTime(personalInfo.getDateOfBirth());
-			    Calendar calDateOfNow = Calendar.getInstance();
-			    calDateOfNow.setTime(new Date());
-			    personalInfoDto.setAge(calDateOfNow.get(Calendar.YEAR) - calDateOfBirth.get(Calendar.YEAR));
-				personalInfoDto.setIdNumber(personalInfo.getIdNumber());
-				Map<String, Object> temp = new HashMap<String, Object>();
-				temp.put("parameterCode", personalInfo.getGender());
-				personalInfoDto.setGenderCode(personalInfo.getGender());
-				try {
-					personalInfoDto.setGender(parameterI18nService.getParameter(temp, p_locale).getParameterValue());
-				} catch (Exception e) {}
-				personalInfoDto.setPlaceOfBirth(personalInfo.getPlaceOfBirth());	
-				personalInfoDto.setDateOfBirth(DateUtil.DATE.format(personalInfo.getDateOfBirth()));
-				personalInfoDto.setImage(personalInfo.getImage());
-			}
-			return personalInfoDto;
+			return getPersonalInfo(user.getUsername(), p_locale);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	private PersonalInfoDto getPersonalInfo(String p_username, String p_locale) throws Exception {
+		PersonalInfoDto personalInfoDto = new PersonalInfoDto();
+		PersonalInfoEntity personalInfo = this.personalInfoRepo.findByUser_Username(p_username);
+		if(personalInfo != null) {
+		    Calendar calDateOfBirth = Calendar.getInstance();
+		    calDateOfBirth.setTime(personalInfo.getDateOfBirth());
+		    Calendar calDateOfNow = Calendar.getInstance();
+		    calDateOfNow.setTime(new Date());
+		    personalInfoDto.setAge(calDateOfNow.get(Calendar.YEAR) - calDateOfBirth.get(Calendar.YEAR));
+			personalInfoDto.setIdNumber(personalInfo.getIdNumber());
+			Map<String, Object> temp = new HashMap<String, Object>();
+			temp.put("parameterCode", personalInfo.getGender());
+			personalInfoDto.setGenderCode(personalInfo.getGender());
+			try {
+				personalInfoDto.setGender(parameterI18nService.getParameter(temp, p_locale).getParameterValue());
+			} catch (Exception e) {}
+			personalInfoDto.setPlaceOfBirth(personalInfo.getPlaceOfBirth());	
+			personalInfoDto.setDateOfBirth(DateUtil.DATE.format(personalInfo.getDateOfBirth()));
+			personalInfoDto.setImage(personalInfo.getImage());
+		}
+		return personalInfoDto;
 	}
 
 	public ApiBaseResponse doUpdateProfile(ProfileDto p_dto, Authentication p_authentication, String p_locale) throws Exception {

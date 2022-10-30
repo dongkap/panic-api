@@ -111,34 +111,35 @@ public class FakeReportImplService extends CommonService {
 		return response;
 	}
 	
-	private FakeReportDto toObject(FakeReportEntity panic, String p_locale) throws Exception {
+	private FakeReportDto toObject(FakeReportEntity fake, String p_locale) throws Exception {
 		FakeReportDto response = new FakeReportDto();
-		response.setFakeCode(panic.getFakeCode());
-		response.setUsername(panic.getUsername());
-		response.setName(panic.getName());
+		response.setId(fake.getId());
+		response.setFakeCode(fake.getFakeCode());
+		response.setUsername(fake.getUsername());
+		response.setName(fake.getName());
 		Map<String, Object> temp = new HashMap<String, Object>();
-		temp.put("parameterCode", panic.getGender());
+		temp.put("parameterCode", fake.getGender());
 		response.setGender(parameterI18nService.getParameter(temp, p_locale).getParameterValue());
-		response.setAge(panic.getAge());
-		response.setPhoneNumber(panic.getPhoneNumber());
-		response.setIdNumber(panic.getIdNumber());
-		response.setMonth(DateUtil.getMonthName(p_locale, panic.getMonth()));
-		response.setYear(panic.getYear());
-		response.setLatestLatitude(panic.getLatestCoordinate().getX());
-		response.setLatestLongitude(panic.getLatestCoordinate().getY());
-		response.setLatestFormattedAddress(panic.getLatestFormattedAddress());
-		response.setLatestProvince(panic.getLatestProvince());
-		response.setLatestCity(panic.getLatestCity());
-		response.setLatestDistrict(panic.getLatestDistrict());
-		response.setLatestFileChecksum(panic.getLatestFileChecksum());
-		response.setLatestDeviceID(panic.getLatestDeviceID());
-		response.setLatestDeviceName(panic.getLatestDeviceName());
-		response.setActive(panic.isActive());
-		response.setVersion(panic.getVersion());
-		response.setCreatedDate(panic.getCreatedDate());
-		response.setCreatedBy(panic.getCreatedBy());
-		response.setModifiedDate(panic.getModifiedDate());
-		response.setModifiedBy(panic.getModifiedBy());
+		response.setAge(fake.getAge());
+		response.setPhoneNumber(fake.getPhoneNumber());
+		response.setIdNumber(fake.getIdNumber());
+		response.setMonth(DateUtil.getMonthName(p_locale, fake.getMonth()));
+		response.setYear(fake.getYear());
+		response.setLatestLatitude(fake.getLatestCoordinate().getX());
+		response.setLatestLongitude(fake.getLatestCoordinate().getY());
+		response.setLatestFormattedAddress(fake.getLatestFormattedAddress());
+		response.setLatestProvince(fake.getLatestProvince());
+		response.setLatestCity(fake.getLatestCity());
+		response.setLatestDistrict(fake.getLatestDistrict());
+		response.setLatestFileChecksum(fake.getLatestFileChecksum());
+		response.setLatestDeviceID(fake.getLatestDeviceID());
+		response.setLatestDeviceName(fake.getLatestDeviceName());
+		response.setActive(fake.isActive());
+		response.setVersion(fake.getVersion());
+		response.setCreatedDate(fake.getCreatedDate());
+		response.setCreatedBy(fake.getCreatedBy());
+		response.setModifiedDate(fake.getModifiedDate());
+		response.setModifiedBy(fake.getModifiedBy());
 		return response;
 	}
 

@@ -53,17 +53,17 @@ public class PanicReportController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(this.panicReportService.doPostPanicReport(dto, evidence, authentication, locale), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/vw/auth/panic/v.1/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)	
-	public ResponseEntity<PanicReportDto> getPanicReport(Authentication authentication,
-			@PathVariable(required = true) String code,
-			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		return new ResponseEntity<PanicReportDto>(this.panicReportService.getPanicReport(code, authentication, locale), HttpStatus.OK);
-	}
-	
 	@RequestMapping(value = "/vw/auth/panic/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ResponseEntity<List<PanicReportDto>> getAllPanicReport(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		return new ResponseEntity<List<PanicReportDto>>(this.panicReportService.getAllPanicReport(authentication, locale), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/panic/v.1/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)	
+	public ResponseEntity<PanicReportDto> getPanicReport(Authentication authentication,
+			@PathVariable(required = true) String id,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		return new ResponseEntity<PanicReportDto>(this.panicReportService.getPanicReport(id, authentication, locale), HttpStatus.OK);
 	}
 
     @ResponseSuccess(SuccessCode.OK_UPDATED)
@@ -74,7 +74,7 @@ public class PanicReportController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(this.panicReportService.doProcessPanicReport(dto, authentication, locale), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/vw/post/datatable/panic-reports/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/vw/auth/datatable/panic-reports/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommonResponseDto<PanicReportDto>> getDatatablePanicReport(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
