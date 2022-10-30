@@ -42,8 +42,8 @@ public class ContactUserEntity extends BaseAuditEntity {
 	@Column(name = "phone_number", nullable = true)
 	private String phoneNumber;
 
-	@Column(name = "administrative_area_name", nullable = true)
-	private String administrativeAreaName;
+	@Column(name = "administrative_area_short", nullable = true)
+	private String administrativeAreaShort;
 	
 	@Column(name = "address", nullable = true)
 	private String address;

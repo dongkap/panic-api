@@ -87,9 +87,6 @@ public class PanicReportImplService extends CommonService {
 	@Autowired
 	private ParameterI18nService parameterI18nService;
 	
-	@Value("#{new Boolean('${dongkap.notif.default.is-admin}')}")
-    protected Boolean isNotifToAdmin;
-	
     @Value("${dongkap.notif.icon}")
     protected String iconNotify;
 	
@@ -159,11 +156,7 @@ public class PanicReportImplService extends CommonService {
 			findNearest.setLatitude(dto.getLatitude());
 			findNearest.setLongitude(dto.getLongitude());
 			List<String> to = new ArrayList<String>();
-			if(isNotifToAdmin) {
-				to = this.employeeService.getEmployeeNearestIncludeAdmin(findNearest, p_locale);
-			} else {
-				to = this.employeeService.getEmployeeNearest(findNearest, p_locale);
-			}
+			to = this.employeeService.getEmployeeNearest(findNearest, p_locale);
 			PushNotificationDto message = new PushNotificationDto();
 			message.setTitle(authentication.getName());
 			message.setBody(panic.getLatestFormattedAddress());

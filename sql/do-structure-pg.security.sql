@@ -153,7 +153,7 @@ CREATE TABLE security.sec_r_user_role (
 CREATE TABLE security.sec_contact_user (
 	contact_user_uuid varchar(36) NOT NULL,
 	phone_number varchar(20),
-	administrative_area_name varchar(255),
+	administrative_area_short varchar(255),
 	address text,
 	country varchar(200),
 	country_code varchar(100),

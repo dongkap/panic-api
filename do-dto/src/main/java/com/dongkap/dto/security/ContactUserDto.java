@@ -20,7 +20,7 @@ public class ContactUserDto extends BaseAuditDto {
 	 */
 	private static final long serialVersionUID = -1742415621743889509L;
 	private String phoneNumber;
-	private String administrativeAreaName;
+	private String administrativeAreaShort;
 	private String address;
 	private String country;
 	private String countryCode;

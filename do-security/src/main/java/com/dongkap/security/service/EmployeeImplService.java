@@ -1,12 +1,12 @@
 package com.dongkap.security.service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,9 +88,11 @@ public class EmployeeImplService extends CommonService implements EmployeeServic
 	@Value("${dongkap.web.url.activate-account}")
 	private String urlActivateAccount;
 	
-	private static final String DEFAULT_ROLE_EMPLOYEE = "ROLE_MONITORING";
-	
+	@Value("#{new Boolean('${dongkap.notif.default.is-admin}')}")
+    protected Boolean isNotifToAdmin;
+
 	private static final String DEFAULT_ROLE_ADMIN = "ROLE_ADMINISTRATOR";
+	private static final String DEFAULT_ROLE_EMPLOYEE = "ROLE_MONITORING";
 
 	@Override
 	public List<String> getEmployeeNearest(FindNearestDto p_dto, String p_locale)
@@ -111,25 +113,26 @@ public class EmployeeImplService extends CommonService implements EmployeeServic
 		    	  .orElse(new RegionalEntity());
 		    }
 		}
-		List<EmployeeEntity> employeeList = this.employeeRepo.findByRegional_Id(regional.getId());
-		List<String> toResult = new ArrayList<String>();
-		employeeList.forEach(value -> {
-			toResult.add(value.getUser().getUsername());
+
+		Map<String, String> userToMap = new HashMap<String, String>();
+		List<ContactUserEntity> contactUserLists = this.contactRepo.findByAdministrativeAreaShort(p_dto.getAdministrativeAreaShort());
+		contactUserLists.forEach(contact -> {
+			userToMap.put(contact.getUser().getUsername(), contact.getUser().getUsername());
 		});
+		List<EmployeeEntity> employeeList = this.employeeRepo.findByRegional_Id(regional.getId());
+		employeeList.forEach(value -> {
+			userToMap.put(value.getUser().getUsername(), value.getUser().getUsername());
+		});
+		if(isNotifToAdmin) {
+			RoleEntity role = this.roleRepo.findByAuthority(DEFAULT_ROLE_ADMIN);
+			role.getUsers().forEach(user -> {
+				userToMap.put(user.getUsername(), user.getUsername());
+			});	
+		}
+		List<String> toResult = userToMap.keySet().stream().collect(Collectors.toList());
 		return toResult;
 	}
 
-	@Override
-	public List<String> getEmployeeNearestIncludeAdmin(FindNearestDto p_dto, String p_locale)
-			throws Exception {
-		final List<String> toResult = this.getEmployeeNearest(p_dto, p_locale);
-		RoleEntity role = this.roleRepo.findByAuthority(DEFAULT_ROLE_ADMIN);
-		role.getUsers().forEach(user -> {
-			toResult.add(user.getUsername());
-		});
-		return toResult;
-		
-	}
 
 	@Transactional
 	public CorporateDto getCorporate(String username) throws Exception {

@@ -64,7 +64,7 @@ public class ProfileImplService implements ProfileService {
 			ContactUserDto contactUserDto = new ContactUserDto();
 			ContactUserEntity contactUser = this.contactUserRepo.findByUser_Username(user.getUsername());
 			if(contactUser != null) {
-				contactUserDto.setAdministrativeAreaName(contactUser.getAdministrativeAreaName());
+				contactUserDto.setAdministrativeAreaShort(contactUser.getAdministrativeAreaShort());
 				contactUserDto.setAddress(contactUser.getAddress());
 				contactUserDto.setCountry(contactUser.getCountry());
 				contactUserDto.setProvince(contactUser.getProvince());
@@ -119,7 +119,7 @@ public class ProfileImplService implements ProfileService {
 		if (user.getUsername() != null) {
 			ContactUserEntity contactUser = this.contactUserRepo.findByUser_Username(user.getUsername());
 			if (contactUser != null) {
-				contactUser.setAdministrativeAreaName(p_dto.getAdministrativeAreaName());
+				contactUser.setAdministrativeAreaShort(p_dto.getAdministrativeAreaShort());
 				contactUser.setAddress(p_dto.getAddress());
 				contactUser.setCountry(p_dto.getCountry());
 				contactUser.setProvince(p_dto.getProvince());
