@@ -42,6 +42,9 @@ public class JwtTokenConfiguration {
 					accessToken.getAdditionalInformation().put("theme", temp.get("theme"));
 					accessToken.getAdditionalInformation().put("server_date", DateUtil.DATE.format(new Date()));
 					accessToken.getAdditionalInformation().put("xrkey", publicKey);
+					if(temp.get("administrative_area_short") != null) {
+						accessToken.getAdditionalInformation().put("administrative_area_short", temp.get("administrative_area_short"));	
+					}
 					OAuth2AccessToken newAccessToken = super.enhance(accessToken, authentication);
 					newAccessToken.getAdditionalInformation().putAll(temp);
 					return newAccessToken;

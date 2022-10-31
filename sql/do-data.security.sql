@@ -294,45 +294,45 @@ INSERT INTO security.sec_settings (settings_uuid, user_uuid) VALUES
 -- Dumping data for table sec_contact_user
 --
 
-INSERT INTO security.sec_contact_user (contact_user_uuid, user_uuid, address, phone_number) VALUES 
-('ddb7cb6b-5c2b-4e8c-b992-5c57b93af165', 'a919a43e-c5e5-45ce-90c1-0ee7c282372b', 'Jl. Trunojoyo No.3, RT.2/RW.1', '0217218000'),
-('fa35f658-1e20-4509-ad3f-a8b532ea99c2', 'd2ae598e-5ae7-4d76-82c2-6a7634062d37', 'Jl. WR Supratman No 7 Denpasar', '0361227174'),
-('215410ba-763a-4ba4-8b4f-1cd9ce8321d1', 'b9b4e0f0-0857-41b8-adb1-2a3fd235d13c', 'Jl. Komplek Perkantoran Air Itam No 3 Pangkal Pinang', '0717437908'),
-('86a62574-88ff-43d6-8e73-ea1c8551bf97', '541ec496-62fe-4b01-93fb-363da7f3f6fc', 'Jl. Syeh Nawawi Al Bantani No 76 Serang', '0254228454'),
-('46d26e4c-2694-4a96-87f6-007d33cc3dda', '8076994f-f22b-4d9f-b093-a8ca7e1a5d11', 'Jl. Adam Malik Km 9 Bengkulu', '073651041'),
-('19ebb397-248a-419c-a869-994a728b41ff', '36b8f700-e4cf-45d2-aaf8-f1e3e7dbe836', 'Jl. Lingkar Utama Condong Catur Yogyakarta', '0274885009'),
-('5816ca49-682e-41f2-8502-ef0237bb6410', '9ddb452e-1dab-438b-855e-f735fc0c66a2', 'Jl. Limboto Raya No 17 Gorontalo', '0435838536'),
-('aedb367d-41c4-414f-aa92-9272de127662', 'dcb49994-1f47-4650-b869-8b318f93dde4', 'Jl. Jend Sudirman No 45 Jambi', '074122025'),
-('f4a8d89f-0c81-40ed-8119-bdafbbd8b8a2', 'becbf470-6949-4820-a338-f0d9983e2f48', 'Jl. Soekarno Hatta No 748 Bandung', '0227800005'),
-('1e01c884-6cf7-4a78-99a4-0f909df7e1e8', 'a881f8d4-0afb-4b11-953c-fab0141182e3', 'Jl. Pahlawan No 1 Semarang', '0248413044'),
-('9256a44a-adbc-45dd-84fb-5519353c4519', '6aca21b4-0f35-40c7-9882-f472d78c8185', 'Jl. A. Yani No 116 Surabaya', '0318280333'),
-('903ccd78-44de-4eab-bb4d-6f59366d9219', '22cf3dab-a318-45d5-92dc-0ed73f4331bd', 'Jl. A. Yani No 1 Pontianak', '0561734004'),
-('5ba04456-688d-4c57-9833-4bb69791a1ad', '6bee06f2-ef33-450f-b1bc-dd93a49559ca', 'Jl. S. Parman No 16 Banjarmasin', '05113354876'),
-('654fcbe9-8349-4354-a0aa-aaafb582bcc2', '44c745e1-9de2-44f9-bb80-101a114ecf0a', 'Jl. Tjilik Riwut Km 1 Palangkaraya', '05363221720'),
-('3ebb1012-eca2-4417-b1f2-7df301a930b1', '502bc59b-c2cd-4920-bfdf-6931354f02d0', 'Jl. Syarifuddin Yoes No 99 Balikpapan', '0542421220'),
-('e9f6ea0a-afdf-4ef8-bf77-b2b88bc79b08', 'f80ef54f-5f9d-47a7-b356-834b451ba45e', 'Kalimantan Utara', '110'),
-('813d39c2-3d53-449a-8ce3-44d55d5655b7', '63fb8263-e672-41e7-ad42-ca3d1d61463c', 'Jl. Hang Jebat Batu Besar, Nongsa, Batam', '07787763541'),
-('a7063322-0898-4476-a3ab-641ba5291b79', 'fe1ebd88-8702-416d-ad91-6bebf12302d8', 'Jl. WR Supratman No 1 Bandar Lampung', '0721486832'),
-('ee97ec4a-fba2-4036-bb98-5aeb7e46192b', '47882cf5-d6c5-4899-a746-3ca81f848e95', 'Jl. Rijali No 1 Ambon', '0911352912'),
-('d667c6ba-9bef-40fd-9a8a-274bdf51a655', '7a7a006b-c40d-4917-af3a-cfa697a0b356', 'Jl. Kapitan Pattimura, Kalumpang, Ternate', '0921327045'),
-('1af2403b-a4f8-4492-94c1-5d6ab8b4a094', '1ac29215-75e8-4e19-b4f1-e076da7ca1ab', 'Jl. Jend Sudirman No 55 Jakarta Selatan', '0215234001'),
-('d9c14d4e-890b-49c2-aa15-d70ab87e0c42', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'Jl. Cut Meutia No 25 Banda Aceh', '065129556'),
-('f9cdb922-32bb-45f7-bb5a-5b853d4e1feb', '18585be5-e7ec-4933-87b3-92384bf33f5f', 'Jl. Langko No 77 Mataram', '0370633152'),
-('5660a4b4-13a4-4d0c-9bdd-0afebd97f448', '0ec057fe-0640-440e-ac35-0ad9cb4acd13', 'Jl. Soeharto No 3 Kupang', '0380833132'),
-('25cc4e94-7c55-479c-be57-421f6538fd42', 'f93ecaa1-2dd4-4f34-abd1-37f2d3c395d2', 'Jl. Dr Samratulangi No 8 Jayapura', '0967531014'),
-('46cb004a-9025-4685-b8fa-e082dd5d7a62', '40c1b405-a157-405b-bc9b-f6c9a3218902', 'JL. Pahlawan Sanggeng', '0986211253'),
-('3ba19d4f-fc1e-41b0-9402-5ac3eb0cf02c', 'ced677ee-7d07-4bff-bc0b-8ec334177812', 'Jl. Jend Sudirman No 235 Pekanbaru', '076131307'),
-('94559706-2634-4674-a19b-cbb4858f08ca', '72be5b40-12b2-42e9-81e7-3ce4a6a6dc62', 'Jl. Perintis Kemerdekaan Km 16 Makasar', '0411515101'),
-('b8908d8f-cedf-426c-960b-f9111fdcaed1', 'cbfac2f3-7fdb-4e95-85b5-522188c46940', 'Jl. Dr Samratulangi No 78 Palu', '0451421555'),
-('5ca6737e-1e09-43f8-85c3-2399d488a82b', '2cf708c7-3096-411b-869d-35b3db2d055e', 'Jl. Haluleo No 1 Kendari', '0401391555'),
-('e34bd0c3-3291-4c5e-abd9-1712788f9911', '8972da69-186c-47ec-b5c1-75fc13c6d10b', 'Jl. Bethesda No 62 Manado', '0431862019'),
-('0ed39e70-9d22-4848-9916-92ccdc76a6e8', 'b424674e-f336-4bf5-8aa2-6dfbd2ad06a9', 'Jl. Aiptu Nurman No. 1, Kalubibing Mamuyu', '110'),
-('85a3ad95-82df-41e0-880c-b5a74d6879e0', '504d4dd4-e718-4e1a-b509-1fd3b270b698', 'Jl. Sudirman No 55 Padang', '075133416'),
-('b431fb03-bf5c-49dd-b0fa-23d9a7adadbb', '65b02457-088c-43fe-b219-4fb9cfeca97a', 'Jl. Jend Sudirman Km 4,5 Palembang', '0711320550'),
-('bfad9391-0b0d-40c0-b823-321c9e5bd545', 'd59c50c6-4c88-40ab-ab32-127b8dcca3da', 'Jl. SM Raja XII Km 10,5 No 60 Medan', '0617879363'),
-('d4fd659f-7bd6-4b1c-9127-e2dcf04651b0', '38527ac6-edb6-4a4f-8e60-eede49c4c2a6', 'Tangerang', '02134567891'),
-('b796e574-ac2d-4180-bf09-14dc146fd921', 'e24b76e6-dee2-4262-80a1-f00f554d0440', 'Jakarta', '02134567892'),
-('c4fa0235-0e4a-4145-aa3b-779a7ff369c2', 'f2cc13e4-f865-4850-bf7c-8fc814e88915', 'Bandung', '02134567893');
+INSERT INTO security.sec_contact_user (contact_user_uuid, user_uuid, administrative_area_short, address, phone_number) VALUES 
+('ddb7cb6b-5c2b-4e8c-b992-5c57b93af165', 'a919a43e-c5e5-45ce-90c1-0ee7c282372b', NULL, 'Jl. Trunojoyo No.3, RT.2/RW.1', '0217218000'),
+('fa35f658-1e20-4509-ad3f-a8b532ea99c2', 'd2ae598e-5ae7-4d76-82c2-6a7634062d37', 'Bali', 'Jl. WR Supratman No 7 Denpasar', '0361227174'),
+('215410ba-763a-4ba4-8b4f-1cd9ce8321d1', 'b9b4e0f0-0857-41b8-adb1-2a3fd235d13c', 'Kepulauan Bangka Belitung', 'Jl. Komplek Perkantoran Air Itam No 3 Pangkal Pinang', '0717437908'),
+('86a62574-88ff-43d6-8e73-ea1c8551bf97', '541ec496-62fe-4b01-93fb-363da7f3f6fc', 'Banten', 'Jl. Syeh Nawawi Al Bantani No 76 Serang', '0254228454'),
+('46d26e4c-2694-4a96-87f6-007d33cc3dda', '8076994f-f22b-4d9f-b093-a8ca7e1a5d11', 'Bengkulu', 'Jl. Adam Malik Km 9 Bengkulu', '073651041'),
+('19ebb397-248a-419c-a869-994a728b41ff', '36b8f700-e4cf-45d2-aaf8-f1e3e7dbe836', 'Daerah Istimewa Yogyakarta', 'Jl. Lingkar Utama Condong Catur Yogyakarta', '0274885009'),
+('5816ca49-682e-41f2-8502-ef0237bb6410', '9ddb452e-1dab-438b-855e-f735fc0c66a2', 'Gorontalo', 'Jl. Limboto Raya No 17 Gorontalo', '0435838536'),
+('aedb367d-41c4-414f-aa92-9272de127662', 'dcb49994-1f47-4650-b869-8b318f93dde4', 'Jambi', 'Jl. Jend Sudirman No 45 Jambi', '074122025'),
+('f4a8d89f-0c81-40ed-8119-bdafbbd8b8a2', 'becbf470-6949-4820-a338-f0d9983e2f48', 'Jawa Barat', 'Jl. Soekarno Hatta No 748 Bandung', '0227800005'),
+('1e01c884-6cf7-4a78-99a4-0f909df7e1e8', 'a881f8d4-0afb-4b11-953c-fab0141182e3', 'Jawa Tengah', 'Jl. Pahlawan No 1 Semarang', '0248413044'),
+('9256a44a-adbc-45dd-84fb-5519353c4519', '6aca21b4-0f35-40c7-9882-f472d78c8185', 'Jawa Timur', 'Jl. A. Yani No 116 Surabaya', '0318280333'),
+('903ccd78-44de-4eab-bb4d-6f59366d9219', '22cf3dab-a318-45d5-92dc-0ed73f4331bd', 'Kalimantan Barat', 'Jl. A. Yani No 1 Pontianak', '0561734004'),
+('5ba04456-688d-4c57-9833-4bb69791a1ad', '6bee06f2-ef33-450f-b1bc-dd93a49559ca', 'Kalimantan Selatan', 'Jl. S. Parman No 16 Banjarmasin', '05113354876'),
+('654fcbe9-8349-4354-a0aa-aaafb582bcc2', '44c745e1-9de2-44f9-bb80-101a114ecf0a', 'Kalimantan Tengah', 'Jl. Tjilik Riwut Km 1 Palangkaraya', '05363221720'),
+('3ebb1012-eca2-4417-b1f2-7df301a930b1', '502bc59b-c2cd-4920-bfdf-6931354f02d0', 'Kalimantan Timur', 'Jl. Syarifuddin Yoes No 99 Balikpapan', '0542421220'),
+('e9f6ea0a-afdf-4ef8-bf77-b2b88bc79b08', 'f80ef54f-5f9d-47a7-b356-834b451ba45e', 'Kalimantan Utara', 'Kalimantan Utara', '110'),
+('813d39c2-3d53-449a-8ce3-44d55d5655b7', '63fb8263-e672-41e7-ad42-ca3d1d61463c', 'Kepulauan Riau', 'Jl. Hang Jebat Batu Besar, Nongsa, Batam', '07787763541'),
+('a7063322-0898-4476-a3ab-641ba5291b79', 'fe1ebd88-8702-416d-ad91-6bebf12302d8', 'Lampung', 'Jl. WR Supratman No 1 Bandar Lampung', '0721486832'),
+('ee97ec4a-fba2-4036-bb98-5aeb7e46192b', '47882cf5-d6c5-4899-a746-3ca81f848e95', 'Maluku', 'Jl. Rijali No 1 Ambon', '0911352912'),
+('d667c6ba-9bef-40fd-9a8a-274bdf51a655', '7a7a006b-c40d-4917-af3a-cfa697a0b356', 'Maluku Utara', 'Jl. Kapitan Pattimura, Kalumpang, Ternate', '0921327045'),
+('1af2403b-a4f8-4492-94c1-5d6ab8b4a094', '1ac29215-75e8-4e19-b4f1-e076da7ca1ab', 'Daerah Khusus Ibukota Jakarta', 'Jl. Jend Sudirman No 55 Jakarta Selatan', '0215234001'),
+('d9c14d4e-890b-49c2-aa15-d70ab87e0c42', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'Aceh', 'Jl. Cut Meutia No 25 Banda Aceh', '065129556'),
+('f9cdb922-32bb-45f7-bb5a-5b853d4e1feb', '18585be5-e7ec-4933-87b3-92384bf33f5f', 'Nusa Tenggara Bar.', 'Jl. Langko No 77 Mataram', '0370633152'),
+('5660a4b4-13a4-4d0c-9bdd-0afebd97f448', '0ec057fe-0640-440e-ac35-0ad9cb4acd13', 'Nusa Tenggara Tim.', 'Jl. Soeharto No 3 Kupang', '0380833132'),
+('25cc4e94-7c55-479c-be57-421f6538fd42', 'f93ecaa1-2dd4-4f34-abd1-37f2d3c395d2', 'Papua', 'Jl. Dr Samratulangi No 8 Jayapura', '0967531014'),
+('46cb004a-9025-4685-b8fa-e082dd5d7a62', '40c1b405-a157-405b-bc9b-f6c9a3218902', 'Papua Bar.', 'JL. Pahlawan Sanggeng', '0986211253'),
+('3ba19d4f-fc1e-41b0-9402-5ac3eb0cf02c', 'ced677ee-7d07-4bff-bc0b-8ec334177812', 'Riau', 'Jl. Jend Sudirman No 235 Pekanbaru', '076131307'),
+('94559706-2634-4674-a19b-cbb4858f08ca', '72be5b40-12b2-42e9-81e7-3ce4a6a6dc62', 'Sulawesi Selatan', 'Jl. Perintis Kemerdekaan Km 16 Makasar', '0411515101'),
+('b8908d8f-cedf-426c-960b-f9111fdcaed1', 'cbfac2f3-7fdb-4e95-85b5-522188c46940', 'Sulawesi Tengah', 'Jl. Dr Samratulangi No 78 Palu', '0451421555'),
+('5ca6737e-1e09-43f8-85c3-2399d488a82b', '2cf708c7-3096-411b-869d-35b3db2d055e', 'Sulawesi Tenggara', 'Jl. Haluleo No 1 Kendari', '0401391555'),
+('e34bd0c3-3291-4c5e-abd9-1712788f9911', '8972da69-186c-47ec-b5c1-75fc13c6d10b', 'Sulawesi Utara', 'Jl. Bethesda No 62 Manado', '0431862019'),
+('0ed39e70-9d22-4848-9916-92ccdc76a6e8', 'b424674e-f336-4bf5-8aa2-6dfbd2ad06a9', 'Sulawesi Barat', 'Jl. Aiptu Nurman No. 1, Kalubibing Mamuyu', '110'),
+('85a3ad95-82df-41e0-880c-b5a74d6879e0', '504d4dd4-e718-4e1a-b509-1fd3b270b698', 'Sumatera Barat', 'Jl. Sudirman No 55 Padang', '075133416'),
+('b431fb03-bf5c-49dd-b0fa-23d9a7adadbb', '65b02457-088c-43fe-b219-4fb9cfeca97a', 'Sumatera Selatan', 'Jl. Jend Sudirman Km 4,5 Palembang', '0711320550'),
+('bfad9391-0b0d-40c0-b823-321c9e5bd545', 'd59c50c6-4c88-40ab-ab32-127b8dcca3da', 'Sumatera Utara', 'Jl. SM Raja XII Km 10,5 No 60 Medan', '0617879363'),
+('d4fd659f-7bd6-4b1c-9127-e2dcf04651b0', '38527ac6-edb6-4a4f-8e60-eede49c4c2a6', 'Banten', 'Tangerang', '02134567891'),
+('b796e574-ac2d-4180-bf09-14dc146fd921', 'e24b76e6-dee2-4262-80a1-f00f554d0440', NULL, 'Jakarta', '02134567892'),
+('c4fa0235-0e4a-4145-aa3b-779a7ff369c2', 'f2cc13e4-f865-4850-bf7c-8fc814e88915', NULL, 'Bandung', '02134567893');
 
 --
 -- Dumping data for table sec_personal_info
@@ -361,13 +361,11 @@ INSERT INTO security.sec_corporate(corporate_uuid, corporate_code, corporate_nam
 -- Dumping data for table sec_regional
 --
 
-INSERT INTO security.sec_regional (regional_uuid, regional_name, "version", is_active, created_date, created_by, modified_date, modified_by) VALUES
-('314d8874-eaf2-4926-a24d-627f25c21f2c', 'Polda Metro Jakarta Raya', 0, true, '2018-12-02 20:52:28', 'system', NULL, NULL),
-('61cce2de-866c-488e-8e74-4d96e41c42e9', 'Polda Banten', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('f014dadb-15bc-4581-b26f-cb48fce847c3', 'Polda Jawa Barat', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('94689475-4b90-4b0b-929a-3e41e40f574a', 'Polda Jawa Tengah', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('53fe122a-7dec-4a42-aaa1-2ea38a121044', 'Polda Jawa Timur', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
-('d877a83f-2a3d-403e-b1fd-1b8e3b86a950', 'Polda Bali', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL);
+INSERT INTO security.sec_regional (regional_uuid, regional_name, latitude, longitude, administrative_area_short, administrative_area_name, "version", is_active, created_date, created_by, modified_date, modified_by) VALUES
+('314d8874-eaf2-4926-a24d-627f25c21f2c', 'Polres Metro Jakarta Pusat', -6.1606376, 106.8481494, 'Daerah Khusus Ibukota Jakarta', 'Daerah Khusus Ibukota Jakarta', 0, true, '2018-12-02 20:52:28', 'system', NULL, NULL),
+('61cce2de-866c-488e-8e74-4d96e41c42e9', 'Polres Tangerang Selatan', -6.2872604, 106.1224525, 'Banten', 'Banten', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('31ada16c-fe49-437d-8341-bdb358128339', 'Polresta Tangerang', -6.2758412, 106.3268747, 'Banten', 'Banten', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL),
+('d877a83f-2a3d-403e-b1fd-1b8e3b86a950', 'Polresta Denpasar', -8.6484801, 115.1807026, 'Bali', 'Bali', 0, true, '2018-12-03 11:57:36', 'system', NULL, NULL);
 
 --
 -- Dumping data for table sec_occupation

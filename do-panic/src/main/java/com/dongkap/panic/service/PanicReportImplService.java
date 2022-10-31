@@ -235,23 +235,6 @@ public class PanicReportImplService extends CommonService {
 				panic.setEmergencyCategory(dto.get("emergencyCategory").toString());
 				panic.setStatus(dto.get("status").toString());
 				panic = panicReportRepo.saveAndFlush(panic);
-				/*
-				Map<String, Object> temp = new HashMap<String, Object>();
-				temp.put("parameterCode", dto.get("emergencyCategory").toString());
-				RestTemplate rest = new RestTemplate();
-				FCMNotificationDto fcmData = new FCMNotificationDto();
-				fcmData.setTo("/topics/allTopics");
-				fcmData.setContentAvailable("true");
-				fcmData.getNotification().put("title", "Civillians Emergency Report");
-				fcmData.getNotification().put("body", parameterI18nService.getParameter(temp, "id-ID").getParameterValue());
-				fcmData.getData().put("latitude", panic.getLatestCoordinate().getX());
-				fcmData.getData().put("longitude", panic.getLatestCoordinate().getY());
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				headers.set("Authorization", "key=AAAAk4TEFVM:APA91bErfrTcoSiKt-oc7rS8dCqoN4Kl953dG7TTUJ3IEgJvcLdM1YMjB1n22cRg5XusbvbXTCVgvAxntljZbRhyugs8TkkO4Qcz6QgON_3TS6lJD32DYHaK8P_kL0iFWHvgerXWPmKf");
-				HttpEntity<FCMNotificationDto> requestEntity= new HttpEntity<>(fcmData, headers);
-				rest.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class);
-				*/
 				return null;
 			} else
 				throw new SystemErrorException(ErrorCode.ERR_SYS0404);

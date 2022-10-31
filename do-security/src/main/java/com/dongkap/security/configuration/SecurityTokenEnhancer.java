@@ -20,6 +20,8 @@ import com.dongkap.common.utils.JsonUtils;
 import com.dongkap.common.utils.ParameterStatic;
 import com.dongkap.dto.security.MenuDto;
 import com.dongkap.common.service.UserPrincipal;
+import com.dongkap.security.dao.ContactUserRepo;
+import com.dongkap.security.entity.ContactUserEntity;
 import com.dongkap.security.service.MenuImplService;
 
 public class SecurityTokenEnhancer implements TokenEnhancer {
@@ -29,6 +31,9 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 	@Autowired
 	@Qualifier("menuService")
 	private MenuImplService menuService;
+	
+	@Autowired
+	private ContactUserRepo contactUserRepo;
 	
 	@Value("${dongkap.signature.public-key}")
 	private String publicKey;
@@ -51,6 +56,8 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 					List<Map<String, Object>> extras = jsonUtils.jsonToListOfObj(Map.class, extraString);
 					additionalInfo.put("menus", menus);
 					additionalInfo.put("extras", extras);
+					ContactUserEntity contact = contactUserRepo.findByUser_Username(user.getUsername()); 
+					additionalInfo.put("administrative_area_short", contact.getAdministrativeAreaShort());
 				} catch (Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}
