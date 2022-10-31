@@ -19,14 +19,17 @@ import com.dongkap.common.utils.DateUtil;
 import com.dongkap.common.utils.ErrorCode;
 import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.security.ContactUserDto;
+import com.dongkap.dto.security.EmergencyContactDto;
 import com.dongkap.dto.security.PersonalInfoDto;
 import com.dongkap.dto.security.ProfileDto;
 import com.dongkap.feign.service.ParameterI18nService;
 import com.dongkap.feign.service.ProfileService;
 import com.dongkap.security.dao.ContactUserRepo;
+import com.dongkap.security.dao.EmergencyContactRepo;
 import com.dongkap.security.dao.PersonalInfoRepo;
 import com.dongkap.security.dao.UserRepo;
 import com.dongkap.security.entity.ContactUserEntity;
+import com.dongkap.security.entity.EmergencyContactEntity;
 import com.dongkap.security.entity.PersonalInfoEntity;
 import com.dongkap.security.entity.UserEntity;
 
@@ -43,15 +46,19 @@ public class ProfileImplService implements ProfileService {
 
 	@Autowired
 	private PersonalInfoRepo personalInfoRepo;
+
+	@Autowired
+	private EmergencyContactRepo emergencyContactRepo;
 	
 	@Autowired
 	private ParameterI18nService parameterI18nService;
 	
 	@Override
-	public ProfileDto getProfile(String p_username, String p_locale) throws Exception {
+	public ProfileDto<?> getProfile(String p_username, String p_locale) throws Exception {
 		if (p_username != null) {
 			UserEntity user = userRepo.loadByUsername(p_username);
-			ProfileDto profileDto = new ProfileDto();
+			ProfileDto<?> profileDto = new ProfileDto<>();
+			profileDto.setUserId(user.getId());
 			profileDto.setUsername(user.getUsername());
 			profileDto.setEmail(user.getEmail());
 			profileDto.setName(user.getName());
@@ -63,15 +70,33 @@ public class ProfileImplService implements ProfileService {
 	}
 	
 	@Override
-	public ProfileDto getProfile(Authentication p_authentication, String p_locale) throws Exception {
+	public ProfileDto<?> getProfile(Authentication p_authentication, String p_locale) throws Exception {
 		UserPrincipal user = (UserPrincipal) p_authentication.getPrincipal();
 		if (user.getUsername() != null) {
-			ProfileDto profileDto = new ProfileDto();
+			ProfileDto<?> profileDto = new ProfileDto<>();
+			profileDto.setUserId(user.getId());
 			profileDto.setUsername(user.getUsername());
 			profileDto.setEmail(user.getEmail());
 			profileDto.setName(user.getName());
 			profileDto.setContact(this.getContact(p_authentication, p_locale));
 			profileDto.setPersonalInfo(this.getPersonalInfo(p_authentication, p_locale));
+			return profileDto;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	@Override
+	public ProfileDto<EmergencyContactDto> getProfileEmergency(String p_username, String p_locale) throws Exception {
+		if (p_username != null) {
+			UserEntity user = userRepo.loadByUsername(p_username);
+			ProfileDto<EmergencyContactDto> profileDto = new ProfileDto<>();
+			profileDto.setUserId(user.getId());
+			profileDto.setUsername(user.getUsername());
+			profileDto.setEmail(user.getEmail());
+			profileDto.setName(user.getName());
+			profileDto.setContact(this.getContact(p_username, p_locale));
+			profileDto.setPersonalInfo(this.getPersonalInfo(p_username, p_locale));
+			profileDto.setAdditionalInformation(this.getEmergencyContact(p_username, p_locale));
 			return profileDto;
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
@@ -135,7 +160,33 @@ public class ProfileImplService implements ProfileService {
 		return personalInfoDto;
 	}
 
-	public ApiBaseResponse doUpdateProfile(ProfileDto p_dto, Authentication p_authentication, String p_locale) throws Exception {
+	@Override
+	public EmergencyContactDto getEmergencyContact(Authentication p_authentication, String p_locale) throws Exception {
+		UserPrincipal user = (UserPrincipal) p_authentication.getPrincipal();
+		if (user.getUsername() != null) {
+			return getEmergencyContact(user.getUsername(), p_locale);
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	private EmergencyContactDto getEmergencyContact(String p_username, String p_locale) throws Exception {
+		EmergencyContactDto emergencyContactDto = new EmergencyContactDto();
+		EmergencyContactEntity emergencyContact = this.emergencyContactRepo.findByUser_Username(p_username);
+		if(emergencyContact != null) {
+			emergencyContactDto.setReferenceName(emergencyContact.getReferenceName());
+			emergencyContactDto.setReferenceAddress(emergencyContact.getReferenceAddress());
+			emergencyContactDto.setReferencePhoneNumber(emergencyContact.getReferencePhoneNumber());
+			emergencyContactDto.setRelationshipCode(emergencyContact.getRelationship());
+			Map<String, Object> temp = new HashMap<String, Object>();
+			temp.put("parameterCode", emergencyContact.getRelationship());
+			try {
+				emergencyContactDto.setRelationship(parameterI18nService.getParameter(temp, p_locale).getParameterValue());
+			} catch (Exception e) {}
+		}
+		return emergencyContactDto;
+	}
+
+	public ApiBaseResponse doUpdateProfile(ProfileDto<?> p_dto, Authentication p_authentication, String p_locale) throws Exception {
 		this.doUpdateContact(p_dto.getContact(), p_authentication, p_locale);
 		this.doUpdatePersonalInfo(p_dto.getPersonalInfo(), p_authentication, p_locale);
 		return null;

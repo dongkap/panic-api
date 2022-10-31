@@ -28,12 +28,12 @@ public class FileEvidenceController extends BaseControllerException {
     @Value("${dongkap.file.path.evidence}")
     protected String path;
 
-	@RequestMapping(value = "/vw/get/evidence/v.1/{checksum}/{user}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)	
+	@RequestMapping(value = "/vw/get/evidence/v.1/{checksum}/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)	
 	public ResponseEntity<Resource> downloadFileEvidence(Authentication authentication,
 			@PathVariable(required = true) String checksum,
-			@PathVariable(required = true) String user,
+			@PathVariable(required = true) String userId,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		String path = this.path.concat(user);
+		String path = this.path.concat(userId);
 		return new ResponseEntity<Resource>(this.fileGenericService.getFile(checksum, path), HttpStatus.OK);
 	}
 

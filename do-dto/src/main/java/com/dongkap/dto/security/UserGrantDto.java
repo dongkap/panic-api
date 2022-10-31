@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class UserGrantDto extends ProfileDto {
+public class UserGrantDto extends ProfileDto<Object> {
 	
 	/**
 	 * 

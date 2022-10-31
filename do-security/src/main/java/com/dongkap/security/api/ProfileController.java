@@ -29,9 +29,9 @@ public class ProfileController extends BaseControllerException {
 	private ProfileImplService profileService;
 	
 	@RequestMapping(value = "/vw/get/profile/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ProfileDto> getProfile(Authentication authentication,
+	public ResponseEntity<ProfileDto<?>> getProfile(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		return new ResponseEntity<ProfileDto>(profileService.getProfile(authentication, locale), HttpStatus.OK);
+		return new ResponseEntity<ProfileDto<?>>(profileService.getProfile(authentication, locale), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/vw/get/contact/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +50,7 @@ public class ProfileController extends BaseControllerException {
 	@RequestMapping(value = "/trx/post/profile/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ApiBaseResponse> putProfile(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
-			@RequestBody(required = true) ProfileDto p_dto) throws Exception {
+			@RequestBody(required = true) ProfileDto<?> p_dto) throws Exception {
 		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdateProfile(p_dto, authentication, locale), HttpStatus.OK);
 	}
 

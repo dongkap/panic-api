@@ -2,6 +2,7 @@ package com.dongkap.dto.panic;
 
 import com.dongkap.dto.common.BaseAuditDto;
 import com.dongkap.dto.security.ContactUserDto;
+import com.dongkap.dto.security.EmergencyContactDto;
 import com.dongkap.dto.security.PersonalInfoDto;
 
 import lombok.AllArgsConstructor;
@@ -39,10 +40,12 @@ public class PanicReportDto extends BaseAuditDto {
 	private String emergencyCategoryCode;
 	private String status;
 	private String statusCode;
+	private String userId;
 	private String username;
 	private String name;
 	private String email;
 	private ContactUserDto contact = new ContactUserDto();
 	private PersonalInfoDto personalInfo = new PersonalInfoDto();
+	private EmergencyContactDto emergencyContact;
 
 }

@@ -63,7 +63,7 @@ public class PanicReportController extends BaseControllerException {
 	public ResponseEntity<PanicReportDto> getPanicReport(Authentication authentication,
 			@PathVariable(required = true) String id,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		return new ResponseEntity<PanicReportDto>(this.panicReportService.getPanicReport(id, authentication, locale), HttpStatus.OK);
+		return new ResponseEntity<PanicReportDto>(this.panicReportService.getDetailInfoPanicReport(id, authentication, locale), HttpStatus.OK);
 	}
 
     @ResponseSuccess(SuccessCode.OK_UPDATED)

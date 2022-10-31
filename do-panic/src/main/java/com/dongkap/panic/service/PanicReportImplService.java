@@ -17,6 +17,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,7 @@ import com.dongkap.dto.notification.PushNotificationDto;
 import com.dongkap.dto.panic.FindNearestDto;
 import com.dongkap.dto.panic.PanicReportDto;
 import com.dongkap.dto.panic.RequestPanicReportDto;
+import com.dongkap.dto.security.EmergencyContactDto;
 import com.dongkap.dto.security.ProfileDto;
 import com.dongkap.feign.service.EmployeeService;
 import com.dongkap.feign.service.FileGenericService;
@@ -86,6 +89,9 @@ public class PanicReportImplService extends CommonService {
 	
 	@Autowired
 	private ParameterI18nService parameterI18nService;
+
+	@Autowired
+	private TokenStore tokenStore;
 	
     @Value("${dongkap.notif.icon}")
     protected String iconNotify;
@@ -96,9 +102,11 @@ public class PanicReportImplService extends CommonService {
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public ApiBaseResponse doPostPanicReport(RequestPanicReportDto dto, MultipartFile evidence, Authentication authentication, String p_locale) throws Exception {
 		if (evidence != null && dto != null) {
-			FileMetadataDto fileEvidence = new FileMetadataDto(); 
+			FileMetadataDto fileEvidence = new FileMetadataDto();
+			Map<String, Object> additionalInfo = this.getAdditionalInformation(authentication);
 			try {
-				fileEvidence = fileEvidenceService.putFile(authentication.getName(), evidence.getOriginalFilename(), evidence.getBytes());
+				String pathName = additionalInfo.get("id").toString();
+				fileEvidence = fileEvidenceService.putFile(pathName, evidence.getOriginalFilename(), evidence.getBytes());
 			} catch (Exception e) {
 				throw new SystemErrorException(ErrorCode.ERR_SCR0010);				
 			}
@@ -122,7 +130,7 @@ public class PanicReportImplService extends CommonService {
 			
 			PanicReportEntity panic = panicReportRepo.findById(authentication.getName() + DateUtil.DATE.format(new Date())).orElse(null);
 			if(panic == null) {
-				ProfileDto profile = profileService.getProfile(authentication, p_locale);
+				ProfileDto<?> profile = profileService.getProfile(authentication, p_locale);
 				panic =  new PanicReportEntity();
 				panic.setPanicCode(profile.getUsername() + DateUtil.DATE.format(new Date()));
 				panic.setUsername(profile.getUsername());
@@ -160,19 +168,11 @@ public class PanicReportImplService extends CommonService {
 			PushNotificationDto message = new PushNotificationDto();
 			message.setTitle(authentication.getName());
 			message.setBody(panic.getLatestFormattedAddress());
-			message.setData(toObject(panic, p_locale));
+			message.setData(toPanicDto(panic, p_locale));
 			message.setTag(tagNotify);
 			message.setIcon(iconNotify);
 			webPushNotificationService.broadcast(message, to);
 			return null;
-		} else
-			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-	}
-	
-	public PanicReportDto getPanicReport(String id, Authentication authentication, String p_locale) throws Exception {
-		if(id != null) {
-			PanicReportEntity panic = panicReportRepo.findById(id).orElse(new PanicReportEntity());
-			return toObject(panic, p_locale);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
@@ -184,12 +184,28 @@ public class PanicReportImplService extends CommonService {
 		List<PanicReportDto> response = new ArrayList<PanicReportDto>();
 		panics.forEach(panic -> {
 			try {
-				response.add(toObject(panic, p_locale));
+				PanicReportDto panicReportDto = toPanicDto(panic, p_locale);
+				panicReportDto = this.putProfile(panicReportDto, panic.getUsername(), p_locale);
+				panicReportDto.getContact().setPhoneNumber(panic.getPhoneNumber());
+				panicReportDto.getPersonalInfo().setAge(panic.getAge());
+				response.add(panicReportDto);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
 		return response;
+	}
+	
+	public PanicReportDto getDetailInfoPanicReport(String id, Authentication authentication, String p_locale) throws Exception {
+		if(id != null) {
+			PanicReportEntity panic = panicReportRepo.findById(id).orElse(new PanicReportEntity());
+			PanicReportDto panicReportDto = toPanicDto(panic, p_locale);
+			panicReportDto = this.putProfileWithEmergencyContact(panicReportDto, panic.getUsername(), p_locale);
+			panicReportDto.getContact().setPhoneNumber(panic.getPhoneNumber());
+			panicReportDto.getPersonalInfo().setAge(panic.getAge());
+			return panicReportDto;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
@@ -229,15 +245,20 @@ public class PanicReportImplService extends CommonService {
 		response.setTotalRecord(panicReportRepo.count(PanicReportSpecification.getDatatable(filter.getKeyword())));
 		param.getContent().forEach(value -> {
 			try {
-				response.getData().add(toObject(value, locale));
+				response.getData().add(toPanicDto(value, locale));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
 		return response;
 	}
+
+	public Map<String, Object> getAdditionalInformation(Authentication auth) {
+	    OAuth2AuthenticationDetails auth2AuthenticationDetails = (OAuth2AuthenticationDetails) auth.getDetails();
+	    return tokenStore.readAccessToken(auth2AuthenticationDetails.getTokenValue()).getAdditionalInformation();
+	}
 	
-	private PanicReportDto toObject(PanicReportEntity panic, String p_locale) throws Exception {
+	private PanicReportDto toPanicDto(PanicReportEntity panic, String p_locale) throws Exception {
 		PanicReportDto response = new PanicReportDto();
 		response.setId(panic.getId());
 		response.setPanicCode(panic.getPanicCode());
@@ -272,16 +293,28 @@ public class PanicReportImplService extends CommonService {
 		response.setCreatedBy(panic.getCreatedBy());
 		response.setModifiedDate(panic.getModifiedDate());
 		response.setModifiedBy(panic.getModifiedBy());
-
-		ProfileDto profile = this.profileService.getProfile(panic.getUsername(), p_locale);
-		response.setUsername(profile.getUsername());
-		response.setName(profile.getName());
-		response.setEmail(profile.getEmail());
-		response.setContact(profile.getContact());
-		response.getContact().setPhoneNumber(panic.getPhoneNumber());
-		response.setPersonalInfo(profile.getPersonalInfo());
-		response.getPersonalInfo().setAge(panic.getAge());
 		return response;
+	}
+	
+	private PanicReportDto putProfileWithEmergencyContact(PanicReportDto panicReportDto, String p_username, String p_locale) throws Exception {
+		ProfileDto<EmergencyContactDto> profile = this.profileService.getProfileEmergency(p_username, p_locale);
+		panicReportDto.setEmergencyContact(profile.getAdditionalInformation());
+		return toProfile(panicReportDto, profile);
+	}
+	
+	private PanicReportDto putProfile(PanicReportDto panicReportDto, String p_username, String p_locale) throws Exception {
+		ProfileDto<?> profile = this.profileService.getProfile(p_username, p_locale);
+		return toProfile(panicReportDto, profile);
+	}
+
+	private PanicReportDto toProfile(PanicReportDto panicReportDto, ProfileDto<?> profile) throws Exception {
+		panicReportDto.setUserId(profile.getUserId());
+		panicReportDto.setUsername(profile.getUsername());
+		panicReportDto.setName(profile.getName());
+		panicReportDto.setEmail(profile.getEmail());
+		panicReportDto.setContact(profile.getContact());
+		panicReportDto.setPersonalInfo(profile.getPersonalInfo());
+		return panicReportDto;
 	}
 
 }

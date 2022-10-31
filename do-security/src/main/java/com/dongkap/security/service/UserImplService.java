@@ -73,13 +73,13 @@ public class UserImplService extends CommonService {
 
     private static final String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
 
-	public CommonResponseDto<ProfileDto> getDatatableUser(FilterDto filter) throws Exception {
+	public CommonResponseDto<ProfileDto<?>> getDatatableUser(FilterDto filter) throws Exception {
 		Page<UserEntity> user = userRepo.findAll(UserSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
-		final CommonResponseDto<ProfileDto> response = new CommonResponseDto<ProfileDto>();
+		final CommonResponseDto<ProfileDto<?>> response = new CommonResponseDto<ProfileDto<?>>();
 		response.setTotalFiltered(Long.valueOf(user.getContent().size()));
 		response.setTotalRecord(userRepo.count(UserSpecification.getDatatable(filter.getKeyword())));
 		user.getContent().forEach(value -> {
-			ProfileDto temp = new ProfileDto();
+			ProfileDto<?> temp = new ProfileDto<>();
 			temp.setUsername(value.getUsername());
 			temp.setEmail(value.getEmail());
 			temp.setActive(value.getActive());
