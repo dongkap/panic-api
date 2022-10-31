@@ -78,7 +78,7 @@ public class PanicReportController extends BaseControllerException {
 	public ResponseEntity<CommonResponseDto<PanicReportDto>> getDatatablePanicReport(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		return new ResponseEntity<CommonResponseDto<PanicReportDto>>(this.panicReportService.getDatatablePanicReport(filter, locale), HttpStatus.OK);
+		return new ResponseEntity<CommonResponseDto<PanicReportDto>>(this.panicReportService.getDatatablePanicReport(authentication, filter, locale), HttpStatus.OK);
 	}
 
 }

@@ -19,6 +19,8 @@ public interface PanicReportRepo extends JpaRepository<PanicReportEntity, String
 	PanicReportEntity loadPanicReportByCodeUsername(@Param("code") String code, @Param("username") String username);
 	
 	List<PanicReportEntity> findByActiveAndStatusNull(boolean active);
+	
+	List<PanicReportEntity> findByActiveAndStatusNullAndAdministrativeAreaShort(boolean active, String administrativeAreaShort);
 
 	@Query("SELECT pr.emergencyCategory as emergency, COUNT(pr) as total FROM PanicReportEntity pr WHERE pr.year = :year GROUP BY pr.emergencyCategory ORDER BY pr.emergencyCategory ASC")
 	List<Map<String, Object>> loadDataGroupByEmergency(@Param("year") Integer year);

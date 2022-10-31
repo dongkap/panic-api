@@ -93,6 +93,8 @@ public class PanicReportImplService extends CommonService {
     @Value("${dongkap.notif.tag}")
     protected String tagNotify;
 
+	private static final String DEFAULT_ROLE_ADMIN = "ROLE_ADMINISTRATOR";
+
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public ApiBaseResponse doPostPanicReport(RequestPanicReportDto dto, MultipartFile evidence, Authentication authentication, String p_locale) throws Exception {
 		if (evidence != null && dto != null) {
@@ -172,7 +174,15 @@ public class PanicReportImplService extends CommonService {
 	}
 	
 	public List<PanicReportDto> getAllPanicReport(Authentication authentication, String p_locale) throws Exception {
-		List<PanicReportEntity> panics = panicReportRepo.findByActiveAndStatusNull(true);
+		List<PanicReportEntity> panics = new ArrayList<PanicReportEntity>();
+		Map<String, Object> additionalInfo = this.getAdditionalInformation(authentication);
+		String authority = additionalInfo.get("authority").toString();
+		Object administrativeAreaShort = additionalInfo.get("administrative_area_short");
+		if(administrativeAreaShort == null && authority.equalsIgnoreCase(DEFAULT_ROLE_ADMIN)) {
+			panics = panicReportRepo.findByActiveAndStatusNull(true);
+		} else {
+			panics = panicReportRepo.findByActiveAndStatusNullAndAdministrativeAreaShort(true, administrativeAreaShort.toString());
+		}
 		if(panics == null)
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 		List<PanicReportDto> response = new ArrayList<PanicReportDto>();
@@ -205,7 +215,11 @@ public class PanicReportImplService extends CommonService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 
-	public CommonResponseDto<PanicReportDto> getDatatablePanicReport(FilterDto filter, String locale) throws Exception {
+	public CommonResponseDto<PanicReportDto> getDatatablePanicReport(Authentication authentication, FilterDto filter, String locale) throws Exception {
+		Map<String, Object> additionalInfo = this.getAdditionalInformation(authentication);
+		if(additionalInfo.get("administrative_area_short") != null) {
+	    	filter.getKeyword().put("administrativeAreaShort", additionalInfo.get("administrative_area_short").toString());	
+		}
 		Page<PanicReportEntity> param = panicReportRepo.findAll(PanicReportSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		CommonResponseDto<PanicReportDto> response = new CommonResponseDto<PanicReportDto>();
 		response.setTotalFiltered(Integer.toUnsignedLong(param.getContent().size()));

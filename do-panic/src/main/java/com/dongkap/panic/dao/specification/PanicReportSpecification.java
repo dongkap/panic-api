@@ -43,6 +43,9 @@ public class PanicReportSpecification {
 								case "latestDistrict":
 									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get(key)), String.format("%%%s%%", value.toString().toUpperCase())));
 									break;
+								case "administrativeAreaShort":
+									predicate.getExpressions().add(builder.equal(builder.upper(root.<String>get(key)), value.toString().toUpperCase()));
+									break;
 								case "_all" :
 									predicate = builder.disjunction();
 									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("fullname")), String.format("%%%s%%", value.toString().toUpperCase())));
