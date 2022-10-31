@@ -12,17 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dongkap.common.exceptions.SystemErrorException;
@@ -34,7 +29,6 @@ import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.common.CommonResponseDto;
 import com.dongkap.dto.common.FilterDto;
 import com.dongkap.dto.file.FileMetadataDto;
-import com.dongkap.dto.notification.FCMNotificationDto;
 import com.dongkap.dto.notification.PushNotificationDto;
 import com.dongkap.dto.panic.FindNearestDto;
 import com.dongkap.dto.panic.PanicReportDto;
@@ -185,8 +179,11 @@ public class PanicReportImplService extends CommonService {
 		panics.forEach(panic -> {
 			try {
 				PanicReportDto panicReportDto = toPanicDto(panic, p_locale);
-				panicReportDto = this.putProfile(panicReportDto, panic.getUsername(), p_locale);
+				panicReportDto.setUsername(panic.getUsername());
+				panicReportDto.setName(panic.getName());
 				panicReportDto.getContact().setPhoneNumber(panic.getPhoneNumber());
+				panicReportDto.getPersonalInfo().setIdNumber(panic.getIdNumber());
+				panicReportDto.getPersonalInfo().setGender(panic.getGender());
 				panicReportDto.getPersonalInfo().setAge(panic.getAge());
 				response.add(panicReportDto);
 			} catch (Exception e) {
@@ -208,6 +205,28 @@ public class PanicReportImplService extends CommonService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 
+	public CommonResponseDto<PanicReportDto> getDatatablePanicReport(FilterDto filter, String locale) throws Exception {
+		Page<PanicReportEntity> param = panicReportRepo.findAll(PanicReportSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		CommonResponseDto<PanicReportDto> response = new CommonResponseDto<PanicReportDto>();
+		response.setTotalFiltered(Integer.toUnsignedLong(param.getContent().size()));
+		response.setTotalRecord(panicReportRepo.count(PanicReportSpecification.getDatatable(filter.getKeyword())));
+		param.getContent().forEach(panic -> {
+			try {
+				PanicReportDto panicReportDto = toPanicDto(panic, locale);
+				panicReportDto.setUsername(panic.getUsername());
+				panicReportDto.setName(panic.getName());
+				panicReportDto.getContact().setPhoneNumber(panic.getPhoneNumber());
+				panicReportDto.getPersonalInfo().setIdNumber(panic.getIdNumber());
+				panicReportDto.getPersonalInfo().setGender(panic.getGender());
+				panicReportDto.getPersonalInfo().setAge(panic.getAge());
+				response.getData().add(panicReportDto);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		return response;
+	}
+
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public ApiBaseResponse doProcessPanicReport(Map<String, Object> dto, Authentication authentication, String p_locale) throws Exception {
 		if (dto != null) {
@@ -216,6 +235,7 @@ public class PanicReportImplService extends CommonService {
 				panic.setEmergencyCategory(dto.get("emergencyCategory").toString());
 				panic.setStatus(dto.get("status").toString());
 				panic = panicReportRepo.saveAndFlush(panic);
+				/*
 				Map<String, Object> temp = new HashMap<String, Object>();
 				temp.put("parameterCode", dto.get("emergencyCategory").toString());
 				RestTemplate rest = new RestTemplate();
@@ -231,26 +251,12 @@ public class PanicReportImplService extends CommonService {
 				headers.set("Authorization", "key=AAAAk4TEFVM:APA91bErfrTcoSiKt-oc7rS8dCqoN4Kl953dG7TTUJ3IEgJvcLdM1YMjB1n22cRg5XusbvbXTCVgvAxntljZbRhyugs8TkkO4Qcz6QgON_3TS6lJD32DYHaK8P_kL0iFWHvgerXWPmKf");
 				HttpEntity<FCMNotificationDto> requestEntity= new HttpEntity<>(fcmData, headers);
 				rest.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class);
+				*/
 				return null;
 			} else
 				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-	}
-
-	public CommonResponseDto<PanicReportDto> getDatatablePanicReport(FilterDto filter, String locale) throws Exception {
-		Page<PanicReportEntity> param = panicReportRepo.findAll(PanicReportSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
-		CommonResponseDto<PanicReportDto> response = new CommonResponseDto<PanicReportDto>();
-		response.setTotalFiltered(Integer.toUnsignedLong(param.getContent().size()));
-		response.setTotalRecord(panicReportRepo.count(PanicReportSpecification.getDatatable(filter.getKeyword())));
-		param.getContent().forEach(value -> {
-			try {
-				response.getData().add(toPanicDto(value, locale));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-		return response;
 	}
 
 	public Map<String, Object> getAdditionalInformation(Authentication auth) {
@@ -298,22 +304,13 @@ public class PanicReportImplService extends CommonService {
 	
 	private PanicReportDto putProfileWithEmergencyContact(PanicReportDto panicReportDto, String p_username, String p_locale) throws Exception {
 		ProfileDto<EmergencyContactDto> profile = this.profileService.getProfileEmergency(p_username, p_locale);
-		panicReportDto.setEmergencyContact(profile.getAdditionalInformation());
-		return toProfile(panicReportDto, profile);
-	}
-	
-	private PanicReportDto putProfile(PanicReportDto panicReportDto, String p_username, String p_locale) throws Exception {
-		ProfileDto<?> profile = this.profileService.getProfile(p_username, p_locale);
-		return toProfile(panicReportDto, profile);
-	}
-
-	private PanicReportDto toProfile(PanicReportDto panicReportDto, ProfileDto<?> profile) throws Exception {
 		panicReportDto.setUserId(profile.getUserId());
 		panicReportDto.setUsername(profile.getUsername());
 		panicReportDto.setName(profile.getName());
 		panicReportDto.setEmail(profile.getEmail());
 		panicReportDto.setContact(profile.getContact());
 		panicReportDto.setPersonalInfo(profile.getPersonalInfo());
+		panicReportDto.setEmergencyContact(profile.getAdditionalInformation());
 		return panicReportDto;
 	}
 
