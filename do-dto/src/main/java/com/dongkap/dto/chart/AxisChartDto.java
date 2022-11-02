@@ -1,8 +1,8 @@
 package com.dongkap.dto.chart;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +21,6 @@ public class AxisChartDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5356989006407136210L;
-	private List<String> data = new ArrayList<String>();
+	private Set<String> data = new HashSet<String>();
 
 }

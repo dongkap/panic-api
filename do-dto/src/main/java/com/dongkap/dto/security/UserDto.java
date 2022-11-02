@@ -19,7 +19,9 @@ public class UserDto extends BaseAuditDto {
 	 * 
 	 */
 	private static final long serialVersionUID = -1742415621743889509L;
+	private String userId;
 	private String username;
 	private String email;
+	private String name;
 
 }

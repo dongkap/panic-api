@@ -1,10 +1,16 @@
 package com.dongkap.panic.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dongkap.common.exceptions.SystemErrorException;
 import com.dongkap.common.utils.ErrorCode;
-import com.dongkap.common.utils.ParameterStatic;
 import com.dongkap.dto.chart.AxisChartDto;
 import com.dongkap.dto.chart.CommonChartDto;
 import com.dongkap.dto.chart.LegendChartDto;
 import com.dongkap.dto.chart.SeriesChartDto;
+import com.dongkap.dto.master.ParameterI18nDto;
 import com.dongkap.feign.service.ParameterI18nService;
 import com.dongkap.panic.dao.PanicReportRepo;
+import com.dongkap.panic.entity.PanicStatisticAreaEntity;
+import com.dongkap.panic.entity.PanicStatisticGenderEntity;
+import com.dongkap.panic.utils.ParameterEmergency;
 
 @Service("statisticsPanicReportService")
 public class StatisticsPanicReportImplService {
@@ -37,15 +46,59 @@ public class StatisticsPanicReportImplService {
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public CommonChartDto getStatisticsArea(Integer year, Authentication authentication, String p_locale) throws Exception {
 		if (year != null) {
-			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByProvince(year);
+			List<PanicStatisticAreaEntity> panics = panicReportRepo.loadDataGroupProvinceByEmergencyCategory(year);
 			if(panics != null) {
+				List<String> parameterCodes = new ArrayList<String>(Arrays.asList(new String[] {
+						ParameterEmergency.CATEGORY_EMERGENCY_FIRE,
+						ParameterEmergency.CATEGORY_EMERGENCY_ABDUCTION,
+						ParameterEmergency.CATEGORY_EMERGENCY_THEFT,
+						ParameterEmergency.CATEGORY_EMERGENCY_HER,
+						ParameterEmergency.CATEGORY_EMERGENCY_UNREST,
+						ParameterEmergency.CATEGORY_EMERGENCY_HARASSMENT,
+						ParameterEmergency.CATEGORY_EMERGENCY_THREAT,
+						ParameterEmergency.CATEGORY_EMERGENCY_BULLYING,
+						ParameterEmergency.CATEGORY_EMERGENCY_OTHERS
+				}));
+				List<ParameterI18nDto> emergencyCategories = parameterI18nService.getParameterCode(parameterCodes, p_locale);
 				CommonChartDto chart = new CommonChartDto();
 				LegendChartDto legend = new LegendChartDto();
 				AxisChartDto axis = new AxisChartDto();
+				axis.getData().addAll(panics.stream().filter((distinctByKey(PanicStatisticAreaEntity::getArea))).map(panic -> panic.getArea()).collect(Collectors.toList()));
+				emergencyCategories.forEach(emergencyCategory -> {
+					List<Long> data = new ArrayList<Long>();
+					axis.getData().forEach(area -> {
+						PanicStatisticAreaEntity panicData = panics.stream().filter(panic->panic.getEmergency().equalsIgnoreCase(emergencyCategory.getParameterCode()) && panic.getArea().equalsIgnoreCase(area)).findFirst().orElse(null);
+						if(panicData != null ) { 
+							data.add(panicData.getTotal());
+						}
+					});
+					legend.getData().add(emergencyCategory.getParameterValue());
+					SeriesChartDto series = new SeriesChartDto();
+					series.setName(emergencyCategory.getParameterValue());
+					series.getData().put(emergencyCategory.getParameterValue(), data);
+					chart.getSeries().add(series);
+				});
+				chart.setLegend(legend);
+				chart.setAxis(axis);
+				return chart;
+			} else
+				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
+	public CommonChartDto getAllStatisticsArea(Integer year, Authentication authentication, String p_locale) throws Exception {
+		if (year != null) {
+			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByProvince(year);
+			if(panics != null) {
+				CommonChartDto chart = new CommonChartDto();
+				AxisChartDto axis = new AxisChartDto();
 				SeriesChartDto series = new SeriesChartDto();
-				series.setName("Area");
-				legend.getData().add("Area");
+				LegendChartDto legend = new LegendChartDto();
 				panics.forEach(panic -> {
+					legend.getData().add(panic.get("area").toString());
+					series.setName(panic.get("area").toString());
 					series.getData().put(panic.get("area").toString(), panic.get("total"));
 					axis.getData().add(panic.get("area").toString());
 				});
@@ -60,7 +113,52 @@ public class StatisticsPanicReportImplService {
 	}
 
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
-	public CommonChartDto getStatisticsGender(Integer year, Authentication authentication, String p_locale) throws Exception {
+	public CommonChartDto getStatisticsGender(Integer year, Authentication authentication, String p_gender, String p_locale) throws Exception {
+		if (year != null) {
+			List<PanicStatisticGenderEntity> panics = panicReportRepo.loadDataGroupGenderByEmergencyCategory(year, p_gender);
+			if(panics != null) {
+				List<String> parameterCodes = new ArrayList<String>(Arrays.asList(new String[] {
+						ParameterEmergency.CATEGORY_EMERGENCY_FIRE,
+						ParameterEmergency.CATEGORY_EMERGENCY_ABDUCTION,
+						ParameterEmergency.CATEGORY_EMERGENCY_THEFT,
+						ParameterEmergency.CATEGORY_EMERGENCY_HER,
+						ParameterEmergency.CATEGORY_EMERGENCY_UNREST,
+						ParameterEmergency.CATEGORY_EMERGENCY_HARASSMENT,
+						ParameterEmergency.CATEGORY_EMERGENCY_THREAT,
+						ParameterEmergency.CATEGORY_EMERGENCY_BULLYING,
+						ParameterEmergency.CATEGORY_EMERGENCY_OTHERS
+				}));
+				List<ParameterI18nDto> emergencyCategories = parameterI18nService.getParameterCode(parameterCodes, p_locale);
+				CommonChartDto chart = new CommonChartDto();
+				LegendChartDto legend = new LegendChartDto();
+				AxisChartDto axis = new AxisChartDto();
+				Map<String, Object> param = new HashMap<String, Object>();
+				param.put("parameterCode", p_gender);
+				ParameterI18nDto parameterGender = parameterI18nService.getParameter(param, p_locale);
+				axis.getData().add(parameterGender.getParameterValue());
+				emergencyCategories.forEach(emergencyCategory -> {
+					List<Long> data = new ArrayList<Long>();
+					PanicStatisticGenderEntity panicData = panics.stream().filter(panic->panic.getEmergency().equalsIgnoreCase(emergencyCategory.getParameterCode()) && panic.getGender().equalsIgnoreCase(parameterGender.getParameterCode())).findFirst().orElse(null);
+					if(panicData != null ) { 
+						data.add(panicData.getTotal());
+					}
+					legend.getData().add(emergencyCategory.getParameterValue());
+					SeriesChartDto series = new SeriesChartDto();
+					series.setName(emergencyCategory.getParameterValue());
+					series.getData().put(emergencyCategory.getParameterValue(), data);
+					chart.getSeries().add(series);
+				});
+				chart.setLegend(legend);
+				chart.setAxis(axis);
+				return chart;
+			} else
+				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
+	public CommonChartDto getAllStatisticsGender(Integer year, Authentication authentication, String p_locale) throws Exception {
 		if (year != null) {
 			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByGender(year);
 			if(panics != null) {
@@ -92,44 +190,6 @@ public class StatisticsPanicReportImplService {
 	}
 
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
-	public CommonChartDto getStatisticsPeriode(Integer year, Authentication authentication, String p_locale) throws Exception {
-		if (year != null) {
-			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByMonth(year);
-			if(panics != null) {
-				CommonChartDto chart = new CommonChartDto();
-				LegendChartDto legend = new LegendChartDto();
-				AxisChartDto axis = new AxisChartDto();
-				SeriesChartDto series = new SeriesChartDto();
-				series.setName("Periode");
-				legend.getData().add("Periode");
-				Map<String, Object> temp = new HashMap<String, Object>();
-				for(int i=0; i<12; i++) {
-					String month = ParameterStatic.MONTH_PARAMETER + StringUtils.leftPad(""+(i+1), 2, "0");
-					temp.put("parameterCode", month);
-					String keyData = parameterI18nService.getParameter(temp, p_locale).getParameterValue();
-					axis.getData().add(keyData);
-					for(Map<String, Object> panic: panics) {
-						if(month.equals(panic.get("periode").toString())) {
-							series.getData().put(keyData, panic.get("total"));
-						} else { 
-							if(series.getData().get(keyData) == null) {
-								series.getData().put(keyData, 0);
-							}
-						}
-					}
-					if(panics.size() == 12) break;
-				}
-				chart.setLegend(legend);
-				chart.setAxis(axis);
-				chart.getSeries().add(series);
-				return chart;
-			} else
-				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-		} else
-			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-	}
-
-	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public CommonChartDto getStatisticsEmergency(Integer year, Authentication authentication, String p_locale) throws Exception {
 		if (year != null) {
 			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByEmergency(year);
@@ -141,84 +201,17 @@ public class StatisticsPanicReportImplService {
 				series.setName("Emergency");
 				Map<String, Object> temp = new HashMap<String, Object>();
 				for(Map<String, Object> panic: panics) {
-					temp.put("parameterCode", panic.get("emergency"));
-					try {
-						String keyData = parameterI18nService.getParameter(temp, p_locale).getParameterValue();
-						legend.getData().add(keyData);
-						series.getData().put(keyData, panic.get("total"));
-						axis.getData().add(keyData);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				chart.setLegend(legend);
-				chart.setAxis(axis);
-				chart.getSeries().add(series);
-				return chart;
-			} else
-				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-		} else
-			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-	}
-
-	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
-	public CommonChartDto getStatisticsDevice(Integer year, Authentication authentication, String p_locale) throws Exception {
-		if (year != null) {
-			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByDevice(year);
-			if(panics != null) {
-				CommonChartDto chart = new CommonChartDto();
-				LegendChartDto legend = new LegendChartDto();
-				AxisChartDto axis = new AxisChartDto();
-				SeriesChartDto series = new SeriesChartDto();
-				series.setName("Device");
-				legend.getData().add("Device");
-				for(Map<String, Object> panic: panics) {
-					series.getData().put(panic.get("device").toString(), panic.get("total"));
-					axis.getData().add(panic.get("device").toString());
-				}
-				chart.setLegend(legend);
-				chart.setAxis(axis);
-				chart.getSeries().add(series);
-				return chart;
-			} else
-				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-		} else
-			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
-	}
-
-	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
-	public CommonChartDto getStatisticsAge(Integer year, Authentication authentication, String p_locale) throws Exception {
-		if (year != null) {
-			List<Map<String, Object>> panics = panicReportRepo.loadDataGroupByAge(year);
-			if(panics != null) {
-				CommonChartDto chart = new CommonChartDto();
-				LegendChartDto legend = new LegendChartDto();
-				AxisChartDto axis = new AxisChartDto();
-				SeriesChartDto series = new SeriesChartDto();
-				series.setName("Age");
-				int limitAge = 30;
-				int ageUnder = 0;
-				int ageUpper = 0;
-				for(Map<String, Object> panic: panics) {
-					try {
-						Integer dataAge = Integer.parseInt(panic.get("age").toString());
-						Integer totalAge = Integer.parseInt(panic.get("total").toString());
-						if(dataAge<=limitAge) {
-							ageUnder = ageUnder + totalAge;
-						} else {
-							ageUpper = ageUpper + totalAge;
+					if(panic.get("emergency") != null) {
+						temp.put("parameterCode", panic.get("emergency"));
+						try {
+							String keyData = parameterI18nService.getParameter(temp, p_locale).getParameterValue();
+							legend.getData().add(keyData);
+							series.getData().put(keyData, panic.get("total"));
+							axis.getData().add(keyData);
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
-				}
-				if(ageUnder>0 || ageUpper>0) {
-					legend.getData().add("<= 30 years old");
-					series.getData().put("<= 30 years old", ageUnder);
-					axis.getData().add("<= 30 years old");
-					legend.getData().add("> 30 years old");
-					series.getData().put("> 30 years old", ageUpper);
-					axis.getData().add("> 30 years old");	
 				}
 				chart.setLegend(legend);
 				chart.setAxis(axis);
@@ -228,6 +221,11 @@ public class StatisticsPanicReportImplService {
 				throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+	    Set<Object> seen = ConcurrentHashMap.newKeySet();
+	    return t -> seen.add(keyExtractor.apply(t));
 	}
 
 }

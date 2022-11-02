@@ -22,6 +22,7 @@ import com.dongkap.dto.security.ContactUserDto;
 import com.dongkap.dto.security.EmergencyContactDto;
 import com.dongkap.dto.security.PersonalInfoDto;
 import com.dongkap.dto.security.ProfileDto;
+import com.dongkap.dto.security.UserDto;
 import com.dongkap.feign.service.ParameterI18nService;
 import com.dongkap.feign.service.ProfileService;
 import com.dongkap.security.dao.ContactUserRepo;
@@ -52,6 +53,20 @@ public class ProfileImplService implements ProfileService {
 	
 	@Autowired
 	private ParameterI18nService parameterI18nService;
+
+	@Override
+	public UserDto getUser(String p_username, String p_locale) throws Exception {
+		UserEntity user = this.userRepo.findByUsername(p_username);
+		if(userRepo != null) {
+			UserDto userDto = new UserDto();
+			userDto.setUserId(user.getId());
+			userDto.setUsername(user.getUsername());
+			userDto.setEmail(user.getEmail());
+			userDto.setName(user.getName());
+			return userDto;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
 	
 	@Override
 	public ProfileDto<?> getProfile(String p_username, String p_locale) throws Exception {

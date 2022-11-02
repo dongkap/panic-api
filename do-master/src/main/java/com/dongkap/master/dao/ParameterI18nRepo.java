@@ -11,6 +11,8 @@ public interface ParameterI18nRepo extends JpaRepository<ParameterI18nEntity, St
 
 	List<ParameterI18nEntity> findByParameter_ParameterCode(String parameterCode);
 
+	List<ParameterI18nEntity> findByParameter_ParameterCodeInAndLocaleCode(List<String> parameterCodes, String localeCode);
+
 	ParameterI18nEntity findByParameter_ParameterCodeAndLocaleCode(String parameterCode, String localeCode);
 	
 }

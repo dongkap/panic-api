@@ -71,6 +71,35 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 		});
 		return response;
 	}
+
+	@Override
+	public List<ParameterI18nDto> getParameterCode(List<String> parameterCodes, String locale) throws Exception {
+		if(locale == null) {
+			locale = this.locale;
+		}
+    	Locale i18n = Locale.forLanguageTag(locale);
+    	if(i18n.getDisplayLanguage().isEmpty() || locale.contains(",")) {
+    		locale = this.locale;
+    	}
+		List<ParameterI18nEntity> param = parameterI18nRepo.findByParameter_ParameterCodeInAndLocaleCode(parameterCodes, locale);
+		List<ParameterI18nDto> response = new ArrayList<ParameterI18nDto>();
+		param.forEach(value -> {
+			ParameterI18nDto temp = new ParameterI18nDto();
+			temp.setParameterCode(value.getParameter().getParameterCode());
+			temp.setParameterGroupCode(value.getParameter().getParameterGroup().getParameterGroupCode());
+			temp.setParameterGroupName(value.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterValue(value.getParameterValue());
+			temp.setLocale(value.getLocaleCode());
+			temp.setActive(value.isActive());
+			temp.setVersion(value.getVersion());
+			temp.setCreatedDate(value.getCreatedDate());
+			temp.setCreatedBy(value.getCreatedBy());
+			temp.setModifiedDate(value.getModifiedDate());
+			temp.setModifiedBy(value.getModifiedBy());
+			response.add(temp);
+		});
+		return response;
+	}
 	
 	@Transactional
 	public void postParameterI18n(ParameterRequestDto request, String username) throws Exception {

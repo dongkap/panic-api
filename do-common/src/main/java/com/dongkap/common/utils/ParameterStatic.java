@@ -11,4 +11,7 @@ public final class ParameterStatic {
 	public static final String DELETE_DATA = "DELETE";
 	public static final String NOTIFICATION = "NOTIFICATION";
 
+	public static final String GENDER_MALE = "GENDER.MALE";
+	public static final String GENDER_FEMALE = "GENDER.FEMALE";
+
 }

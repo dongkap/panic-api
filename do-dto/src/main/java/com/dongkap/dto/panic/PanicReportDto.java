@@ -42,8 +42,8 @@ public class PanicReportDto extends BaseAuditDto {
 	private String statusCode;
 	private String userId;
 	private String username;
-	private String name;
 	private String email;
+	private String name;
 	private ContactUserDto contact = new ContactUserDto();
 	private PersonalInfoDto personalInfo = new PersonalInfoDto();
 	private EmergencyContactDto emergencyContact;

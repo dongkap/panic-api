@@ -1,9 +1,8 @@
 package com.dongkap.dto.panic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dongkap.dto.common.BaseAuditDto;
+import com.dongkap.dto.security.ContactUserDto;
+import com.dongkap.dto.security.PersonalInfoDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,12 +23,6 @@ public class FakeReportDto extends BaseAuditDto {
 	private static final long serialVersionUID = -7550850975117219030L;
 	private String id;
 	private String fakeCode;
-	private String username;
-	private String name;
-	private String gender;
-	private String phoneNumber;
-	private Integer age;
-	private String idNumber;
 	private String month;
 	private Integer year;
 	private Double latestLatitude;
@@ -42,8 +35,12 @@ public class FakeReportDto extends BaseAuditDto {
 	private String latestDeviceID;
 	private String latestDeviceName;
 	private String administrativeAreaShort;
-	private String emergencyCategory;
 	private String status;
-	private List<FakeDetailDto> fakeDetails = new ArrayList<FakeDetailDto>();
+	private String userId;
+	private String username;
+	private String email;
+	private String name;
+	private ContactUserDto contact = new ContactUserDto();
+	private PersonalInfoDto personalInfo = new PersonalInfoDto();
 
 }

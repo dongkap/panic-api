@@ -42,7 +42,7 @@ public class FakeReportController extends BaseControllerException {
 	public ResponseEntity<CommonResponseDto<FakeReportDto>> getDatatableFakeReport(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		return new ResponseEntity<CommonResponseDto<FakeReportDto>>(this.fakeReportService.getDatatableFakeReport(filter, locale), HttpStatus.OK);
+		return new ResponseEntity<CommonResponseDto<FakeReportDto>>(this.fakeReportService.getDatatableFakeReport(authentication, filter, locale), HttpStatus.OK);
 	}
 	
 }

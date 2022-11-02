@@ -81,7 +81,6 @@ INSERT INTO security.sec_menu (menu_uuid, code, url, "level", ordering, ordering
 ('77687148-0cda-4a4a-96f1-900cd986c326', 'N/A', '#', 0, 1, '001', 'pie-chart-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
 ('079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', '#STATISTICS-AREA-PAGE', '/app/statistics/area', 1, 0, '001.000', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '77687148-0cda-4a4a-96f1-900cd986c326'),
 ('b2a03772-10d7-4ec5-bb68-99f2d6080cea', '#STATISTICS-GENDER-PAGE', '/app/statistics/gender', 1, 1, '001.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '77687148-0cda-4a4a-96f1-900cd986c326'),
-('90890bf0-8290-44eb-a28d-fb214947c3cb', '#STATISTICS-EMERGENCY-PAGE', '/app/statistics/emergency', 1, 2, '001.002', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '77687148-0cda-4a4a-96f1-900cd986c326'),
 ('5f4872f1-627e-4789-adf7-dc6db3884267', '#EMERGENCY-REPORTS-PAGE', '/app/reports/emergency', 0, 2, '002', 'alert-triangle-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
 ('e76e6cfa-5ef2-4bc4-b5d4-dac5353d071c', '#FAKE-REPORTS-PAGE', '/app/reports/fake', 0, 3, '003', 'slash-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
 ('f6c6570b-0a29-4f3a-baa5-6d273c0bc2a8', 'N/A', '#', 0, 4, '004', 'people-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
@@ -109,7 +108,6 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('28fa2833-f5aa-4eaf-a1f8-cec30efec97f', '77687148-0cda-4a4a-96f1-900cd986c326', 'en-US', 'Statistics', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('27a55e31-1543-4db2-aea2-383bad1f637e', '079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', 'en-US', 'Area', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('027efb44-9365-47e1-802c-98377029a5f5', 'b2a03772-10d7-4ec5-bb68-99f2d6080cea', 'en-US', 'Gender', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
-('6d54ed81-25cf-4608-8eb9-fd6491345ceb', '90890bf0-8290-44eb-a28d-fb214947c3cb', 'en-US', 'Emergency', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('79ab6061-080d-4ed4-a5b2-dbf3c2aa2d28', '5f4872f1-627e-4789-adf7-dc6db3884267', 'en-US', 'Emergency Reports', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('92aefcd3-8556-4e6d-97a6-19005be74491', 'e76e6cfa-5ef2-4bc4-b5d4-dac5353d071c', 'en-US', 'Fake Reports', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('de490bc6-c52e-4b9e-9157-e881b9203886', 'f6c6570b-0a29-4f3a-baa5-6d273c0bc2a8', 'en-US', 'User Management', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
@@ -133,7 +131,6 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('e0498589-37f3-4bd2-8116-9f2713abe051', '77687148-0cda-4a4a-96f1-900cd986c326', 'id-ID', 'Statistik', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('a817dc35-1d8d-4d60-b52a-d823bd5f6b5b', '079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', 'id-ID', 'Area', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('77bf369b-fcf1-4eff-9241-d82e0dfc96a7', 'b2a03772-10d7-4ec5-bb68-99f2d6080cea', 'id-ID', 'Jenis Kelamin', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
-('3ac1d49a-3eaa-4c2d-97b5-11f61e84ce96', '90890bf0-8290-44eb-a28d-fb214947c3cb', 'id-ID', 'Kategori Darurat', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('f143dd3b-ec59-401f-9796-c7c9d253db04', '5f4872f1-627e-4789-adf7-dc6db3884267', 'id-ID', 'Laporan Darurat', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('f6ea0727-8911-4e34-b1f7-26d50570f959', 'e76e6cfa-5ef2-4bc4-b5d4-dac5353d071c', 'id-ID', 'Laporan Fiktif', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('e4d513bf-bebf-4167-bd46-062277f1b7ae', 'f6c6570b-0a29-4f3a-baa5-6d273c0bc2a8', 'id-ID', 'Manajemen Pengguna', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
@@ -163,7 +160,6 @@ INSERT INTO security.sec_function(function_uuid, menu_uuid, role_uuid, access, v
 ('22c3a77b-8f2d-4f04-a925-825a1e223a9e', '77687148-0cda-4a4a-96f1-900cd986c326', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('eee6d9d0-cc19-46e6-80ba-b9cb2360a76a', '079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('e731dcdf-89ba-465a-bfb4-f06a163f10ad', 'b2a03772-10d7-4ec5-bb68-99f2d6080cea', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
-('67f99319-957d-41d5-9bd8-83a68dc77473', '90890bf0-8290-44eb-a28d-fb214947c3cb', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 
 ('a723114c-ce92-41ac-bcbd-4b640c4dbc19', '5f4872f1-627e-4789-adf7-dc6db3884267', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 
@@ -185,10 +181,13 @@ INSERT INTO security.sec_function(function_uuid, menu_uuid, role_uuid, access, v
 --- ROLE_REGIONAL_ADMINISTRATOR
 ('32efed5f-ce8d-45ea-8384-4e6ca9621021', 'b9029fd3-44cd-479c-965d-a8da1bfb20eb', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,write,trust', 0, true, '2018-12-19 10:06:50.069434', 'admin', null, null),
 
-('31384490-7bae-49aa-9124-8408596a564d', '77687148-0cda-4a4a-96f1-900cd986c326', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
-('fcf95e54-e135-48c4-918a-9c4e683c8fff', '079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
-('52ba7847-4fb7-48d9-86c1-586c0148ce18', 'b2a03772-10d7-4ec5-bb68-99f2d6080cea', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
-('40964dc4-8421-4717-9186-bbfd3ec0ee87', '90890bf0-8290-44eb-a28d-fb214947c3cb', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null);
+('0e58ab93-70d8-48f2-b994-017f3a7dfb89', '77687148-0cda-4a4a-96f1-900cd986c326', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
+('3dadbdc2-5517-4b5a-812f-0841b071445d', '079f7d96-8ef9-40d5-ab1a-0f6641e3e8cf', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
+('c7b6d3b8-73ca-43f5-afd4-94719652a367', 'b2a03772-10d7-4ec5-bb68-99f2d6080cea', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
+
+('8d3dc29f-8d71-4ddf-9af9-006cccf22cdb', '5f4872f1-627e-4789-adf7-dc6db3884267', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
+
+('74ff335e-073f-4e58-81bb-e3b01872819f', 'e76e6cfa-5ef2-4bc4-b5d4-dac5353d071c', '9295fefc-7dfe-44ed-a4e3-52165cf44373', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null);
 
 --- Extra Menu
 INSERT INTO security.sec_function(function_uuid, menu_uuid, role_uuid, access, version, is_active, created_date, created_by, modified_date, modified_by) VALUES

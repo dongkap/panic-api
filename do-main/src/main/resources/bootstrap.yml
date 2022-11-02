@@ -25,6 +25,52 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 60MB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:cer}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:P@ssw0rd}
+    platform: postgres
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: SecurityDongkapPool
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 30000
+      connection-timeout: 30000
+      idle-timeout: 120000
+      max-lifetime: 720000
+      maximum-pool-size: 50
+      minimum-idle: 5
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        temp:
+          use_jdbc_metadata_defaults: false
+        show_sql: false
+    show-sql: false
+    hibernate:
+      connection:
+        provider_class: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
   security:
     oauth2:
       client:
@@ -62,27 +108,33 @@ spring:
 logging:
   level:
     root: INFO
-    org.apache: INFO
-    com.netflix: INFO
-    com.netflix.loadbalancer.reactive.LoadBalancerCommand: DEBUG
-    org.springframework.web: INFO
-    org.springframework.cloud: INFO
     org.hibernate.SQL: INFO
     org.hibernate.type: INFO
+    com.netflix.loadbalancer.reactive.LoadBalancerCommand: INFO
+    com.netflix: INFO
+    org.springframework.web: INFO
+    org.springframework.cloud: INFO
+    org.apache: INFO
     org.apache.http: INFO
     org.apache.tomcat: INFO
+    org.apache.catalina.session.ManagerBase.level: INFO
     com.mchange.v2.async.ThreadPoolAsynchronousRunner: INFO
     com.github.isrsal.logging.LoggingFilter: INFO
-    org.apache.catalina.session.ManagerBase.level: INFO
 
 ---
 spring:
   profiles: development
   jpa:
+    properties:
+      hibernate:
+        show_sql: true
     show-sql: true
 
 ---
 spring:
   profiles: production
   jpa:
+    properties:
+      hibernate:
+        show_sql: false
     show-sql: false

@@ -1,6 +1,7 @@
 package com.dongkap.panic.service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -124,11 +125,15 @@ public class PanicReportImplService extends CommonService {
 			device.setDeviceName(dto.getDeviceName());
 			device = deviceRepo.saveAndFlush(device);
 			
-			PanicReportEntity panic = panicReportRepo.findById(authentication.getName() + DateUtil.DATE.format(new Date())).orElse(null);
+			/**
+			 * TODO If data report has been submit to fake report
+			 */
+			String panicCode = Base64.getEncoder().encodeToString((authentication.getName() + ":" + DateUtil.DATE.format(new Date())).getBytes());
+			PanicReportEntity panic = panicReportRepo.findByPanicCode(panicCode);
 			if(panic == null) {
 				ProfileDto<?> profile = profileService.getProfile(authentication, p_locale);
 				panic =  new PanicReportEntity();
-				panic.setPanicCode(profile.getUsername() + DateUtil.DATE.format(new Date()));
+				panic.setPanicCode(panicCode);
 				panic.setUsername(profile.getUsername());
 				panic.setName(profile.getName());
 				panic.setPhoneNumber(profile.getContact().getPhoneNumber());
@@ -217,8 +222,10 @@ public class PanicReportImplService extends CommonService {
 
 	public CommonResponseDto<PanicReportDto> getDatatablePanicReport(Authentication authentication, FilterDto filter, String locale) throws Exception {
 		Map<String, Object> additionalInfo = this.getAdditionalInformation(authentication);
-		if(additionalInfo.get("administrative_area_short") != null) {
-	    	filter.getKeyword().put("administrativeAreaShort", additionalInfo.get("administrative_area_short").toString());	
+		String authority = additionalInfo.get("authority").toString();
+		Object administrativeAreaShort = additionalInfo.get("administrative_area_short");
+		if(administrativeAreaShort != null && !authority.equalsIgnoreCase(DEFAULT_ROLE_ADMIN)) {
+	    	filter.getKeyword().put("administrativeAreaShort", administrativeAreaShort.toString());	
 		}
 		Page<PanicReportEntity> param = panicReportRepo.findAll(PanicReportSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		CommonResponseDto<PanicReportDto> response = new CommonResponseDto<PanicReportDto>();
@@ -231,7 +238,7 @@ public class PanicReportImplService extends CommonService {
 				panicReportDto.setName(panic.getName());
 				panicReportDto.getContact().setPhoneNumber(panic.getPhoneNumber());
 				panicReportDto.getPersonalInfo().setIdNumber(panic.getIdNumber());
-				panicReportDto.getPersonalInfo().setGender(panic.getGender());
+				panicReportDto.getPersonalInfo().setGenderCode(panic.getGender());
 				panicReportDto.getPersonalInfo().setAge(panic.getAge());
 				response.getData().add(panicReportDto);
 			} catch (Exception e) {
@@ -244,7 +251,7 @@ public class PanicReportImplService extends CommonService {
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED, rollbackFor = SystemErrorException.class)
 	public ApiBaseResponse doProcessPanicReport(Map<String, Object> dto, Authentication authentication, String p_locale) throws Exception {
 		if (dto != null) {
-			PanicReportEntity panic = panicReportRepo.findById(dto.get("panicCode").toString()).orElse(null);
+			PanicReportEntity panic = panicReportRepo.findById(dto.get("id").toString()).orElse(null);
 			if(panic != null) {
 				panic.setEmergencyCategory(dto.get("emergencyCategory").toString());
 				panic.setStatus(dto.get("status").toString());

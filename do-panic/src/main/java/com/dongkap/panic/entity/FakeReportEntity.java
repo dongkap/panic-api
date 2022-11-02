@@ -50,11 +50,20 @@ public class FakeReportEntity extends BaseAuditEntity {
 	@Column(name = "fake_code", nullable = false, unique = true)
 	private String fakeCode;
 
+	@Column(name = "user_uuid", nullable = false)
+	private String userId;
+
 	@Column(name = "username", nullable = false)
 	private String username;
 
+	@Column(name = "email", nullable = false)
+	private String email;
+
 	@Column(name = "fullname", nullable = false)
 	private String name;
+	
+	@Column(name = "address", nullable = true)
+	private String address;
 	
 	@Column(name = "gender", nullable = false)
 	private String gender;
@@ -67,6 +76,9 @@ public class FakeReportEntity extends BaseAuditEntity {
 
 	@Column(name = "id_number", nullable = false)
 	private String idNumber;
+
+	@Column(name = "image", nullable = true)
+	private String image;
 
 	@Column(name = "month_report", nullable = false)
 	private String month;
