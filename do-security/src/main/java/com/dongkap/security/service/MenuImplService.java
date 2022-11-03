@@ -277,6 +277,7 @@ public class MenuImplService {
 		final Map<String, String> menuI18n = new HashMap<String, String>();
 		final Map<String, String> parentMenu = new HashMap<String, String>();
 		final MenuItemDto menuItemDto = new MenuItemDto();
+		menuItemDto.setId(menu.getId());
 		menuItemDto.setCode(menu.getCode());
 		menuItemDto.setIcon(menu.getIcon());
 		menuItemDto.setLink(menu.getUrl());

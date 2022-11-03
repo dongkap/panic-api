@@ -40,6 +40,7 @@ public class ParameterGroupImplService extends CommonService {
 			ParameterGroupDto temp = new ParameterGroupDto();
 			temp.setParameterGroupCode(value.getParameterGroupCode());
 			temp.setParameterGroupName(value.getParameterGroupName());
+			temp.setParameterGroupType(value.getParameterGroupType());
 			temp.setActive(value.isActive());
 			temp.setVersion(value.getVersion());
 			temp.setCreatedDate(value.getCreatedDate());
@@ -58,6 +59,7 @@ public class ParameterGroupImplService extends CommonService {
 			if (paramGroup == null) {
 				paramGroup = new ParameterGroupEntity();
 				paramGroup.setParameterGroupCode(request.getParameterGroupCode());
+				paramGroup.setParameterGroupType(request.getParameterGroupType());
 				paramGroup.setCreatedBy(username);
 				paramGroup.setCreatedDate(new Date());
 			} else {

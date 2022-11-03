@@ -82,6 +82,21 @@ public class RoleImplService extends CommonService {
 		});
 		return response;
 	}
+
+	public RoleDto getRole(String authority) throws Exception {
+		RoleEntity role = this.roleRepo.findByAuthority(authority);
+		RoleDto result = new RoleDto();
+		result.setAuthority(role.getAuthority());
+		result.setDescription(role.getDescription());
+		result.setActive(role.getActive());
+		result.setVersion(role.getVersion());
+		result.setCreatedDate(role.getCreatedDate());
+		result.setCreatedBy(role.getCreatedBy());
+		result.setModifiedDate(role.getModifiedDate());
+		result.setModifiedBy(role.getModifiedBy());
+		result.setGroup(role.getSysAuth().dto());
+		return result;
+	}
 	
 	@Transactional
 	public void postRole(RoleDto request, String username) throws Exception {

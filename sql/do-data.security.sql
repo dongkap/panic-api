@@ -89,10 +89,9 @@ INSERT INTO security.sec_menu (menu_uuid, code, url, "level", ordering, ordering
 ('54f79e70-7caf-4728-b3b4-c9620cff7b44', 'N/A', '#', 0, 5, '005', 'shield-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
 ('04420b4a-b4c0-43a9-8deb-723ed9d634ba', '#MANAGEMENT-ROLE-PAGE', '/app/mgmt/role', 1, 1, '005.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
 ('a695c3ec-71de-41d2-9623-fc96e55a6e35', '#MANAGEMENT-MENU-PAGE', '/app/mgmt/menu', 1, 2, '005.002', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
-('d59c50c6-4c88-40ab-ab32-127b8dcca3da', '#MANAGEMENT-ACCESS-CONTROL-PAGE', '/app/mgmt/access/control', 1, 3, '005.003', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
 ('3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'N/A', '#', 0, 6, '006', 'settings-2-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
 ('8c66c75e-5931-40af-af28-7c60b366ffd4', '#SYSCONF-PARAMETER-PAGE', '/app/sysconf/parameter', 1, 0, '006.000', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '3cf5bced-7def-426a-99f7-c8d44e1ce74c'),
-('b81076bf-dda0-4278-b639-ba6f750eb8c9', '#SYSCONF-LANGUAGE-PAGE', '/app/sysconf/language', 1, 1, '006.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '3cf5bced-7def-426a-99f7-c8d44e1ce74c');
+('b81076bf-dda0-4278-b639-ba6f750eb8c9', '#SYSCONF-I18N-PAGE', '/app/sysconf/i18n', 1, 1, '006.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '3cf5bced-7def-426a-99f7-c8d44e1ce74c');
 --- Extra Menu
 INSERT INTO security.sec_menu (menu_uuid, code, url, "level", ordering, ordering_str, "type", icon, is_leaf, is_home, is_group, "version", is_active, created_date, created_by, modified_date, modified_by, parent_uuid) VALUES
 ('59e7e128-fe95-48d4-97a9-5441ae3d320c', '#PROFILE-PAGE', '/app/user/profile', 0, 0, '100', 'extra', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
@@ -116,7 +115,6 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('a1191b12-754d-4a63-b428-a23e467e780d', '54f79e70-7caf-4728-b3b4-c9620cff7b44', 'en-US', 'Authorization', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('504d4dd4-e718-4e1a-b509-1fd3b270b698', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', 'en-US', 'Role Management', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('ced677ee-7d07-4bff-bc0b-8ec334177812', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'en-US', 'Menu Management', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
-('63fb8263-e672-41e7-ad42-ca3d1d61463c', 'd59c50c6-4c88-40ab-ab32-127b8dcca3da', 'en-US', 'Access Control', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('14306a74-a7ba-42f9-8bfe-600e95ffa3b3', '3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'en-US', 'System Configuration', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('1afe5dbe-3519-452f-8060-615541116f0d', '8c66c75e-5931-40af-af28-7c60b366ffd4', 'en-US', 'Parameter', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('fb616657-b89d-4540-89bf-9a87ebf7ac83', 'b81076bf-dda0-4278-b639-ba6f750eb8c9', 'en-US', 'Language', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL);
@@ -139,7 +137,6 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('b17009e7-3fc8-4ac6-8f24-e158bf990102', '54f79e70-7caf-4728-b3b4-c9620cff7b44', 'id-ID', 'Otorisasi', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('0dd142d0-150e-4ccf-bd06-66cafa686760', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', 'id-ID', 'Manajemen Role', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('59cfa1a7-3ac3-4bc2-bffb-d390e7fc687f', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'id-ID', 'Manajemen Menu', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
-('c476ec90-ecb9-407b-9095-95f5b0cd00d1', 'd59c50c6-4c88-40ab-ab32-127b8dcca3da', 'id-ID', 'Kontrol Akses', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('b104f88a-d41f-4941-8d67-3b1aa3ce6b17', '3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'id-ID', 'Konfigurasi Sistem', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('4b6bf4dd-e8e5-48a3-8573-235659497c9f', '8c66c75e-5931-40af-af28-7c60b366ffd4', 'id-ID', 'Parameter', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('3dbb0fcb-0228-4f12-b3ad-27c3b5de5c0f', 'b81076bf-dda0-4278-b639-ba6f750eb8c9', 'id-ID', 'Bahasa', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL);
@@ -172,7 +169,6 @@ INSERT INTO security.sec_function(function_uuid, menu_uuid, role_uuid, access, v
 ('b7fa3611-2328-4b27-971d-6d6fcfeb8cc9', '54f79e70-7caf-4728-b3b4-c9620cff7b44', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('ecd52b04-b300-4715-8451-d2e6e46f52cf', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('3d75947f-970d-4265-bc9a-a62d90938566', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
-('dce708ad-10b8-46cc-a74c-a9df9521bf0c', 'd59c50c6-4c88-40ab-ab32-127b8dcca3da', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 
 ('d2e330b1-b87c-4891-ad95-ca01d95c9b16', '3cf5bced-7def-426a-99f7-c8d44e1ce74c', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('4803570a-360b-42b4-98da-f282acbbc1f2', '8c66c75e-5931-40af-af28-7c60b366ffd4', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),

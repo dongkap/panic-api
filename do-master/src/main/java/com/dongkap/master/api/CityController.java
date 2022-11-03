@@ -30,7 +30,7 @@ public class CityController extends BaseControllerException {
 		return new ResponseEntity<SelectResponseDto>(cityService.getSelectCity(filter), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/vw/post/datatable/city/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/vw/auth/datatable/city/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommonResponseDto<CityDto>> getDatatableCity(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter) throws Exception {
 		return new ResponseEntity<CommonResponseDto<CityDto>>(cityService.getDatatableCity(filter), HttpStatus.OK);

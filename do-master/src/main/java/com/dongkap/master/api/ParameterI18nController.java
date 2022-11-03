@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dongkap.common.aspect.ResponseSuccess;
 import com.dongkap.common.exceptions.BaseControllerException;
-import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.common.utils.SuccessCode;
+import com.dongkap.dto.checkbox.CheckboxDto;
+import com.dongkap.dto.common.ApiBaseResponse;
+import com.dongkap.dto.common.CommonResponseDto;
 import com.dongkap.dto.common.FilterDto;
 import com.dongkap.dto.master.ParameterI18nDto;
 import com.dongkap.dto.master.ParameterRequestDto;
+import com.dongkap.dto.radio.RadioDto;
 import com.dongkap.dto.select.SelectResponseDto;
 import com.dongkap.master.service.ParameterI18nImplService;
 
@@ -33,20 +36,47 @@ public class ParameterI18nController extends BaseControllerException {
 	private ParameterI18nImplService parameterI18nService;
 
 	@RequestMapping(value = "/vw/post/select/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SelectResponseDto> getSelectCity(Authentication authentication,
+	public ResponseEntity<SelectResponseDto> getSelectParameter(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		return new ResponseEntity<SelectResponseDto>(this.parameterI18nService.getSelect(filter, locale), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/vw/post/radio/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RadioDto>> getRadioParameter(Authentication authentication,
+			@RequestBody(required = true) FilterDto filter,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		return new ResponseEntity<List<RadioDto>>(this.parameterI18nService.getRadio(filter, locale), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/post/checkbox/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<CheckboxDto>> getCheckboxParameter(Authentication authentication,
+			@RequestBody(required = true) FilterDto filter,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		return new ResponseEntity<List<CheckboxDto>>(this.parameterI18nService.getCheckbox(filter, locale), HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/vw/post/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<ParameterI18nDto>> getParameterCode(Authentication authentication,
+	public ResponseEntity<ParameterI18nDto> getParameterCode(Authentication authentication,
+			@RequestBody(required = true) Map<String, Object> param,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		return new ResponseEntity<ParameterI18nDto>(this.parameterI18nService.getParameter(param, locale), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/datatable/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CommonResponseDto<ParameterI18nDto>> getDatatableParameter(Authentication authentication,
+			@RequestBody(required = true) FilterDto filter) throws Exception {
+		return new ResponseEntity<CommonResponseDto<ParameterI18nDto>>(this.parameterI18nService.getDatatableParameterI18n(filter), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/all/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ParameterI18nDto>> getParameterCodes(Authentication authentication,
 			@RequestBody(required = true) Map<String, Object> filter) throws Exception {
 		return new ResponseEntity<List<ParameterI18nDto>>(this.parameterI18nService.getParameterCode(filter), HttpStatus.OK);
 	}
 	
 	@ResponseSuccess(SuccessCode.OK_SCR009)
-	@RequestMapping(value = "/trx/post/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/trx/auth/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ApiBaseResponse> postParameterCode(Authentication authentication,
 			@RequestBody(required = true) ParameterRequestDto data) throws Exception {
 		String username = authentication.getName();

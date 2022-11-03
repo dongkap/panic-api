@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,12 @@ public class RoleController extends BaseControllerException {
 	public ResponseEntity<CommonResponseDto<RoleDto>> getDatatableRole(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter) throws Exception {
 		return new ResponseEntity<CommonResponseDto<RoleDto>>(this.roleService.getDatatable(filter), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/role/v.1/{authority}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RoleDto> getRole(Authentication authentication,
+			@PathVariable(required = true) String authority) throws Exception {
+		return new ResponseEntity<RoleDto>(this.roleService.getRole(authority), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/vw/auth/select/all-role/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

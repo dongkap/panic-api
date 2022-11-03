@@ -20,9 +20,12 @@ import org.springframework.stereotype.Service;
 import com.dongkap.common.exceptions.SystemErrorException;
 import com.dongkap.common.service.CommonService;
 import com.dongkap.common.utils.ErrorCode;
+import com.dongkap.dto.checkbox.CheckboxDto;
+import com.dongkap.dto.common.CommonResponseDto;
 import com.dongkap.dto.common.FilterDto;
 import com.dongkap.dto.master.ParameterI18nDto;
 import com.dongkap.dto.master.ParameterRequestDto;
+import com.dongkap.dto.radio.RadioDto;
 import com.dongkap.dto.select.SelectDto;
 import com.dongkap.dto.select.SelectResponseDto;
 import com.dongkap.feign.service.ParameterI18nService;
@@ -59,6 +62,7 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 			temp.setParameterCode(value.getParameter().getParameterCode());
 			temp.setParameterGroupCode(value.getParameter().getParameterGroup().getParameterGroupCode());
 			temp.setParameterGroupName(value.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterGroupType(value.getParameter().getParameterGroup().getParameterGroupType());
 			temp.setParameterValue(value.getParameterValue());
 			temp.setLocale(value.getLocaleCode());
 			temp.setActive(value.isActive());
@@ -88,6 +92,7 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 			temp.setParameterCode(value.getParameter().getParameterCode());
 			temp.setParameterGroupCode(value.getParameter().getParameterGroup().getParameterGroupCode());
 			temp.setParameterGroupName(value.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterGroupType(value.getParameter().getParameterGroup().getParameterGroupType());
 			temp.setParameterValue(value.getParameterValue());
 			temp.setLocale(value.getLocaleCode());
 			temp.setActive(value.isActive());
@@ -164,6 +169,7 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 			temp.setParameterCode(parameterI18n.getParameter().getParameterCode());
 			temp.setParameterGroupCode(parameterI18n.getParameter().getParameterGroup().getParameterGroupCode());
 			temp.setParameterGroupName(parameterI18n.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterGroupType(parameterI18n.getParameter().getParameterGroup().getParameterGroupType());
 			temp.setParameterValue(parameterI18n.getParameterValue());
 			temp.setLocale(parameterI18n.getLocaleCode());
 			temp.setActive(parameterI18n.isActive());
@@ -178,6 +184,30 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 		}
 	}
 
+	public CommonResponseDto<ParameterI18nDto> getDatatableParameterI18n(FilterDto filter) throws Exception {
+		Page<ParameterI18nEntity> param = parameterI18nRepo.findAll(ParameterI18nSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		final CommonResponseDto<ParameterI18nDto> response = new CommonResponseDto<ParameterI18nDto>();
+		response.setTotalFiltered(Long.valueOf(param.getContent().size()));
+		response.setTotalRecord(parameterI18nRepo.count(ParameterI18nSpecification.getDatatable(filter.getKeyword())));
+		param.getContent().forEach(value -> {
+			ParameterI18nDto temp = new ParameterI18nDto();
+			temp.setParameterValue(value.getParameterValue());
+			temp.setLocale(value.getLocaleCode());
+			temp.setParameterCode(value.getParameter().getParameterCode());
+			temp.setParameterGroupCode(value.getParameter().getParameterGroup().getParameterGroupCode());
+			temp.setParameterGroupName(value.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterGroupType(value.getParameter().getParameterGroup().getParameterGroupType());
+			temp.setActive(value.getActive());
+			temp.setVersion(value.getVersion());
+			temp.setCreatedDate(value.getCreatedDate());
+			temp.setCreatedBy(value.getCreatedBy());
+			temp.setModifiedDate(value.getModifiedDate());
+			temp.setModifiedBy(value.getModifiedBy());
+			response.getData().add(temp);
+		});
+		return response;
+	}
+
 	public SelectResponseDto getSelect(FilterDto filter, String locale) throws Exception {
     	Locale i18n = Locale.forLanguageTag(locale);
     	if(i18n.getDisplayLanguage().isEmpty()) {
@@ -190,6 +220,42 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 		response.setTotalRecord(parameterI18nRepo.count(ParameterI18nSpecification.getSelect(filter.getKeyword())));
 		parameter.getContent().forEach(value -> {
 			response.getData().add(new SelectDto(value.getParameterValue(), value.getParameter().getParameterCode(), !value.getParameter().isActive(), null));
+		});
+		return response;
+	}
+
+	public List<RadioDto> getRadio(FilterDto filter, String locale) throws Exception {
+		if(locale == null) {
+    		locale = this.locale;
+		} else {
+	    	final Locale i18n = Locale.forLanguageTag(locale);
+	    	if(i18n.getDisplayLanguage().isEmpty()) {
+	    		locale = this.locale;
+	    	}	
+		}
+    	filter.getKeyword().put("localeCode", locale);
+		Page<ParameterI18nEntity> parameter = parameterI18nRepo.findAll(ParameterI18nSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		final List<RadioDto> response = new ArrayList<RadioDto>();
+		parameter.getContent().forEach(value -> {
+			response.add(new RadioDto(value.getParameterValue(), value.getParameter().getParameterCode(), !value.getParameter().getActive(), null));
+		});
+		return response;
+	}
+
+	public List<CheckboxDto> getCheckbox(FilterDto filter, String locale) throws Exception {
+		if(locale == null) {
+    		locale = this.locale;
+		} else {
+	    	final Locale i18n = Locale.forLanguageTag(locale);
+	    	if(i18n.getDisplayLanguage().isEmpty()) {
+	    		locale = this.locale;
+	    	}	
+		}
+    	filter.getKeyword().put("localeCode", locale);
+		Page<ParameterI18nEntity> parameter = parameterI18nRepo.findAll(ParameterI18nSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		final List<CheckboxDto> response = new ArrayList<CheckboxDto>();
+		parameter.getContent().forEach(value -> {
+			response.add(new CheckboxDto(value.getParameter().getParameterCode(), value.getParameterValue(), !value.getParameter().getActive(), null));
 		});
 		return response;
 	}
