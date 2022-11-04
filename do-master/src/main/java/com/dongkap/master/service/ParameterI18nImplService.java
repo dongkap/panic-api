@@ -76,6 +76,28 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 		return response;
 	}
 
+	public List<ParameterI18nDto> getParameterI18n(String parameterCode) throws Exception {
+		List<ParameterI18nEntity> param = parameterI18nRepo.findByParameter_ParameterCode(parameterCode);
+		List<ParameterI18nDto> response = new ArrayList<ParameterI18nDto>();
+		param.forEach(value -> {
+			ParameterI18nDto temp = new ParameterI18nDto();
+			temp.setParameterCode(value.getParameter().getParameterCode());
+			temp.setParameterGroupCode(value.getParameter().getParameterGroup().getParameterGroupCode());
+			temp.setParameterGroupName(value.getParameter().getParameterGroup().getParameterGroupName());
+			temp.setParameterGroupType(value.getParameter().getParameterGroup().getParameterGroupType());
+			temp.setParameterValue(value.getParameterValue());
+			temp.setLocale(value.getLocaleCode());
+			temp.setActive(value.isActive());
+			temp.setVersion(value.getVersion());
+			temp.setCreatedDate(value.getCreatedDate());
+			temp.setCreatedBy(value.getCreatedBy());
+			temp.setModifiedDate(value.getModifiedDate());
+			temp.setModifiedBy(value.getModifiedBy());
+			response.add(temp);
+		});
+		return response;
+	}
+
 	@Override
 	public List<ParameterI18nDto> getParameterCode(List<String> parameterCodes, String locale) throws Exception {
 		if(locale == null) {
@@ -132,19 +154,21 @@ public class ParameterI18nImplService extends CommonService implements Parameter
 					param = parameterRepo.saveAndFlush(param);
 				} else {
 					for(String localeCode: request.getParameterValues().keySet()) {
-						ParameterI18nEntity paramI18n = parameterI18nRepo.findByParameter_ParameterCodeAndLocaleCode(request.getParameterCode(), localeCode);
-						if (param == null) {
-							paramI18n = new ParameterI18nEntity();
-							paramI18n.setCreatedBy(username);
-							paramI18n.setCreatedDate(new Date());
-						} else {
-							paramI18n.setModifiedBy(username);
-							paramI18n.setModifiedDate(new Date());
+						if(request.getParameterValues().get(localeCode) != null) {
+							ParameterI18nEntity paramI18n = parameterI18nRepo.findByParameter_ParameterCodeAndLocaleCode(request.getParameterCode(), localeCode);
+							if (paramI18n == null) {
+								paramI18n = new ParameterI18nEntity();
+								paramI18n.setCreatedBy(username);
+								paramI18n.setCreatedDate(new Date());
+							} else {
+								paramI18n.setModifiedBy(username);
+								paramI18n.setModifiedDate(new Date());
+							}
+							paramI18n.setLocaleCode(localeCode);
+							paramI18n.setParameterValue(request.getParameterValues().get(localeCode));
+							paramI18n.setParameter(param);
+							parameterI18nRepo.saveAndFlush(paramI18n);
 						}
-						paramI18n.setLocaleCode(localeCode);
-						paramI18n.setParameterValue(request.getParameterValues().get(localeCode));
-						paramI18n.setParameter(param);
-						parameterI18nRepo.saveAndFlush(paramI18n);
 					}
 				}
 			} else {

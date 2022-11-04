@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,10 +70,16 @@ public class ParameterI18nController extends BaseControllerException {
 		return new ResponseEntity<CommonResponseDto<ParameterI18nDto>>(this.parameterI18nService.getDatatableParameterI18n(filter), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/vw/auth/all/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/vw/auth/parameter-i18n/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ParameterI18nDto>> getParameterCodes(Authentication authentication,
 			@RequestBody(required = true) Map<String, Object> filter) throws Exception {
 		return new ResponseEntity<List<ParameterI18nDto>>(this.parameterI18nService.getParameterCode(filter), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/parameter-i18n/v.1/{param}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ParameterI18nDto>> getParameterI18n(Authentication authentication,
+			@PathVariable(required = true) String param) throws Exception {
+		return new ResponseEntity<List<ParameterI18nDto>>(this.parameterI18nService.getParameterI18n(param), HttpStatus.OK);
 	}
 	
 	@ResponseSuccess(SuccessCode.OK_SCR009)

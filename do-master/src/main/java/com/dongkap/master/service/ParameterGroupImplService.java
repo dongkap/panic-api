@@ -31,6 +31,21 @@ public class ParameterGroupImplService extends CommonService {
 	@Autowired
 	private ParameterGroupRepo parameterGroupRepo;
 
+	public ParameterGroupDto getParameterGroup(String parameterGroupCode) throws Exception {
+		ParameterGroupEntity paramGroup = parameterGroupRepo.findByParameterGroupCode(parameterGroupCode);
+		ParameterGroupDto response = new ParameterGroupDto();
+		response.setParameterGroupCode(paramGroup.getParameterGroupCode());
+		response.setParameterGroupName(paramGroup.getParameterGroupName());
+		response.setParameterGroupType(paramGroup.getParameterGroupType());
+		response.setActive(paramGroup.isActive());
+		response.setVersion(paramGroup.getVersion());
+		response.setCreatedDate(paramGroup.getCreatedDate());
+		response.setCreatedBy(paramGroup.getCreatedBy());
+		response.setModifiedDate(paramGroup.getModifiedDate());
+		response.setModifiedBy(paramGroup.getModifiedBy());
+		return response;
+	}
+
 	public CommonResponseDto<ParameterGroupDto> getDatatableParameterGroup(FilterDto filter) throws Exception {
 		Page<ParameterGroupEntity> paramGroup = parameterGroupRepo.findAll(ParameterGroupSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		CommonResponseDto<ParameterGroupDto> response = new CommonResponseDto<ParameterGroupDto>();
