@@ -78,13 +78,15 @@ public class MenuImplService {
 				menu.setCreatedBy(userPrincipal.getUsername());
 				menu.setCreatedDate(new Date());
 				for(String key: p_dto.getI18n().keySet()) {
-					menuI18n = new MenuI18nEntity();
-					menuI18n.setLocale(key);
-					menuI18n.setTitle(p_dto.getI18n().get(key));
-					menuI18n.setCreatedBy(userPrincipal.getUsername());
-					menuI18n.setCreatedDate(new Date());
-					menuI18n.setMenu(menu);
-					menu.getMenuI18n().add(menuI18n);
+					if(!p_dto.getI18n().get(key).isEmpty()) {
+						menuI18n = new MenuI18nEntity();
+						menuI18n.setLocale(key);
+						menuI18n.setTitle(p_dto.getI18n().get(key));
+						menuI18n.setCreatedBy(userPrincipal.getUsername());
+						menuI18n.setCreatedDate(new Date());
+						menuI18n.setMenu(menu);
+						menu.getMenuI18n().add(menuI18n);
+					}
 				}				
 			}
 			menu.setCode(p_dto.getCode());

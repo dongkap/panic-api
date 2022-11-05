@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dongkap.common.exceptions.SystemErrorException;
-import com.dongkap.dto.common.ApiBaseResponse;
+import com.dongkap.common.service.UserPrincipal;
 import com.dongkap.common.utils.ErrorCode;
+import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.security.SettingsDto;
 import com.dongkap.security.dao.SettingsRepo;
 import com.dongkap.security.entity.SettingsEntity;
-import com.dongkap.security.entity.UserEntity;
 
 @Service("settingsService")
 public class SettingsImplService {
@@ -23,7 +23,7 @@ public class SettingsImplService {
 	private SettingsRepo settingsRepo;
 
 	@Transactional
-	public ApiBaseResponse doUpdateSettings(SettingsDto p_dto, UserEntity p_user, String p_locale) throws Exception {
+	public ApiBaseResponse doUpdateSettings(SettingsDto p_dto, UserPrincipal p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
 			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());
 			settings.setTheme(p_dto.getTheme());
@@ -39,7 +39,7 @@ public class SettingsImplService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 	
-	public SettingsDto getSettings(UserEntity p_user, String p_locale) throws Exception {
+	public SettingsDto getSettings(UserPrincipal p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
 			SettingsDto dto = new SettingsDto();
 			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());

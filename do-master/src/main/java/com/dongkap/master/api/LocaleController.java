@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +50,12 @@ public class LocaleController extends BaseControllerException {
 	public ResponseEntity<CommonResponseDto<LocaleDto>> getDatatableLocale(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter) throws Exception {
 		return new ResponseEntity<CommonResponseDto<LocaleDto>>(this.localeService.getDatatableLocale(filter), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/auth/locale/v.1/{param}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LocaleDto> getLocale(Authentication authentication,
+			@PathVariable(required = true) String param) throws Exception {
+		return new ResponseEntity<LocaleDto>(this.localeService.getLocale(param), HttpStatus.OK);
 	}
 	
 	@ResponseSuccess(SuccessCode.OK_SCR010)

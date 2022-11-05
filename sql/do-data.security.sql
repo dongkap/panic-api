@@ -87,6 +87,7 @@ INSERT INTO security.sec_menu (menu_uuid, code, url, "level", ordering, ordering
 ('4dc5f8f6-29e6-4cb1-a137-d4cdd3e2f634', '#MANAGEMENT-CIVILIANS-PAGE', '/app/mgmt/user/civilians', 1, 0, '004.000', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, 'f6c6570b-0a29-4f3a-baa5-6d273c0bc2a8'),
 ('ab0c7ad2-5f53-4d42-9f49-e18a5d378c0f', '#MANAGEMENT-OFFICER-PAGE', '/app/mgmt/user/officer', 1, 1, '004.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, 'f6c6570b-0a29-4f3a-baa5-6d273c0bc2a8'),
 ('54f79e70-7caf-4728-b3b4-c9620cff7b44', 'N/A', '#', 0, 5, '005', 'shield-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
+('5a4ccb25-2f7a-4a11-b158-91042746e94f', '#CLIENT-DETAILS-PAGE', '/app/mgmt/client-ids', 1, 1, '005.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
 ('04420b4a-b4c0-43a9-8deb-723ed9d634ba', '#MANAGEMENT-ROLE-PAGE', '/app/mgmt/role', 1, 1, '005.001', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
 ('a695c3ec-71de-41d2-9623-fc96e55a6e35', '#MANAGEMENT-MENU-PAGE', '/app/mgmt/menu', 1, 2, '005.002', NULL, false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, '54f79e70-7caf-4728-b3b4-c9620cff7b44'),
 ('3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'N/A', '#', 0, 6, '006', 'settings-2-outline', false, false, false, 0, true, '2018-12-04 13:35:36', NULL, NULL, NULL, NULL),
@@ -113,6 +114,7 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('c229f514-2e2b-46c1-9daf-978b34ff732c', '4dc5f8f6-29e6-4cb1-a137-d4cdd3e2f634', 'en-US', 'Civilians', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('60b2a62c-3aff-44e2-8bbd-aa13d64003f5', 'ab0c7ad2-5f53-4d42-9f49-e18a5d378c0f', 'en-US', 'Officer', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('a1191b12-754d-4a63-b428-a23e467e780d', '54f79e70-7caf-4728-b3b4-c9620cff7b44', 'en-US', 'Authorization', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
+('290ef5c7-7e7c-4229-85b6-0e318bc1a327', '5a4ccb25-2f7a-4a11-b158-91042746e94f', 'en-US', 'Client IDs', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('504d4dd4-e718-4e1a-b509-1fd3b270b698', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', 'en-US', 'Role Management', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('ced677ee-7d07-4bff-bc0b-8ec334177812', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'en-US', 'Menu Management', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('14306a74-a7ba-42f9-8bfe-600e95ffa3b3', '3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'en-US', 'System Configuration', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
@@ -135,6 +137,7 @@ INSERT INTO security.sec_menu_i18n (menu_i18n_uuid, menu_uuid, locale_code, titl
 ('d17d8cc6-78d0-4034-b1ec-48a9c9e1d1ae', '4dc5f8f6-29e6-4cb1-a137-d4cdd3e2f634', 'id-ID', 'Warga Sipil', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('afd5dc05-19a7-418b-959d-2ef84c01237d', 'ab0c7ad2-5f53-4d42-9f49-e18a5d378c0f', 'id-ID', 'Petugas', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('b17009e7-3fc8-4ac6-8f24-e158bf990102', '54f79e70-7caf-4728-b3b4-c9620cff7b44', 'id-ID', 'Otorisasi', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
+('3a1c0dba-0864-43a3-8aa7-6267273e0c84', '5a4ccb25-2f7a-4a11-b158-91042746e94f', 'id-ID', 'Client IDs', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('0dd142d0-150e-4ccf-bd06-66cafa686760', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', 'id-ID', 'Manajemen Role', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('59cfa1a7-3ac3-4bc2-bffb-d390e7fc687f', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', 'id-ID', 'Manajemen Menu', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
 ('b104f88a-d41f-4941-8d67-3b1aa3ce6b17', '3cf5bced-7def-426a-99f7-c8d44e1ce74c', 'id-ID', 'Konfigurasi Sistem', 0, true, '2018-12-04 13:37:15', NULL, NULL, NULL),
@@ -167,6 +170,7 @@ INSERT INTO security.sec_function(function_uuid, menu_uuid, role_uuid, access, v
 ('554fb325-19d3-4e95-ad32-530b2d8a5f83', 'ab0c7ad2-5f53-4d42-9f49-e18a5d378c0f', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 
 ('b7fa3611-2328-4b27-971d-6d6fcfeb8cc9', '54f79e70-7caf-4728-b3b4-c9620cff7b44', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
+('84afa0fc-d4cb-4d8b-a367-cd60d68a8430', '5a4ccb25-2f7a-4a11-b158-91042746e94f', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('ecd52b04-b300-4715-8451-d2e6e46f52cf', '04420b4a-b4c0-43a9-8deb-723ed9d634ba', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 ('3d75947f-970d-4265-bc9a-a62d90938566', 'a695c3ec-71de-41d2-9623-fc96e55a6e35', '06be80df-5c41-42a7-9050-b328312d2f3a', 'read,write,trust', 0, true, '2018-12-19 10:09:14.249008', 'admin', null, null),
 

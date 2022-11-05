@@ -75,6 +75,23 @@ public class LocaleImplService extends CommonService {
 		return response;
 	}
 
+	public LocaleDto getLocale(String localeCode) throws Exception {
+		LocaleEntity locale = localeRepo.findByLocaleCode(localeCode);
+		LocaleDto response = new LocaleDto();
+		response.setLocaleCode(locale.getLocaleCode());
+		response.setIdentifier(locale.getIdentifier());
+		response.setIcon(locale.getIcon());
+		response.setLocaleDefault(locale.isLocaleDefault());
+		response.setLocaleEnabled(locale.isLocaleEnabled());
+		response.setActive(locale.isActive());
+		response.setVersion(locale.getVersion());
+		response.setCreatedDate(locale.getCreatedDate());
+		response.setCreatedBy(locale.getCreatedBy());
+		response.setModifiedDate(locale.getModifiedDate());
+		response.setModifiedBy(locale.getModifiedBy());
+		return response;
+	}
+
 	public CommonResponseDto<LocaleDto> getDatatableLocale(FilterDto filter) throws Exception {
 		Page<LocaleEntity> locale = localeRepo.findAll(LocaleSpecification.getDatatable(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		CommonResponseDto<LocaleDto> response = new CommonResponseDto<LocaleDto>();
