@@ -29,6 +29,7 @@ import com.dongkap.dto.common.ApiBaseResponse;
 import com.dongkap.dto.notification.MailNotificationDto;
 import com.dongkap.dto.security.ForgotPasswordDto;
 import com.dongkap.dto.security.RequestForgotPasswordDto;
+import com.dongkap.feign.service.MailSenderService;
 import com.dongkap.security.dao.UserRepo;
 import com.dongkap.security.entity.UserEntity;
 
@@ -36,21 +37,24 @@ import com.dongkap.security.entity.UserEntity;
 public class ForgotPasswordImplService {
 
 	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
-	@Value("${dongkap.signature.aes.secret-key}")
-	private String secretKey;
 
 	@Autowired
 	private UserRepo userRepo;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private MailSenderService mailSenderService;
 
-	@Value("${dongkap.web.url.forgot-password}")
-	private String urlForgotPassword;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Value("${dongkap.signature.aes.secret-key}")
+	private String secretKey;
+
+	@Value("${dongkap.web.url.forgot-password}")
+	private String urlForgotPassword;
 
 	@Value("${dongkap.locale}")
 	private String localeCode;
@@ -159,12 +163,13 @@ public class ForgotPasswordImplService {
 				cal.add(Calendar.MINUTE, 5);
 				userEntity.setVerificationExpired(cal.getTime());
 				userEntity.setVerificationCode(new RandomString(8).nextString());
+				userEntity = this.userRepo.saveAndFlush(userEntity);
+
 				Locale locale = Locale.getDefault();
 				if(p_locale == null) {
 					p_locale = localeCode;
 				}
 				locale = Locale.forLanguageTag(p_locale);
-				userEntity = this.userRepo.saveAndFlush(userEntity);
 				String template = "forgot-password_"+locale.getLanguage()+".ftl";
 				if(locale == Locale.US)
 					template = "forgot-password.ftl";
@@ -177,8 +182,7 @@ public class ForgotPasswordImplService {
 				mail.setContentTemplate(content);
 				mail.setFileNameTemplate(template);
 				mail.setLocale(p_locale);
-				List<Object> publishDto = new ArrayList<Object>();
-				publishDto.add(mail);
+				this.mailSenderService.sendMessageWithTemplate(mail, locale);
 			} else
 				throw new SystemErrorException(ErrorCode.ERR_SYS0401);
 		} else

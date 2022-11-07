@@ -38,9 +38,18 @@ dongkap:
 
 spring:
   mail:
-    username: ridla.fadilah@gmail.com
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:noreply.dongkap@gmail.com}
+    password: ${MAIL_PASSWORD:N/A}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 mail:
-  personal: panic
+  personal: ${MAIL_PERSONAL:dongkap}
   
 websocket:
   root:
